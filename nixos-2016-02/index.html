@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <meta name="author" content="Tokyo NixOS Meetup" />
+  <title>Packaging 101</title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" type="text/css" media="screen, projection, print"
+    href="http://www.w3.org/Talks/Tools/Slidy2/styles/slidy.css" />
+  <script src="http://www.w3.org/Talks/Tools/Slidy2/scripts/slidy.js"
+    charset="utf-8" type="text/javascript"></script>
+</head>
+<body>
+<div class="slide titlepage">
+  <h1 class="title">Packaging 101</h1>
+  <p class="author">
+Tokyo NixOS Meetup
+  </p>
+  <p class="date">2016, 18 February</p>
+</div>
+<div id="this-month-in-nix---1" class="slide section level1">
+<h1>This month in Nix - 1</h1>
+<h2 id="news-from-the-front">News from the front</h2>
+<ul class="incremental">
+<li><a href="http://nixos.org/nix/manual/#ssec-relnotes-1.11">Nix 1.11 released</a></li>
+<li><a href="https://github.com/NixOS/nix/issues/341">Nix Funding</a>: remove perl from Nix, successly founded!</li>
+<li><a href="https://github.com/NixOS/nix/issues/779">New Nix Command line coming</a> ヽ(=´▽`=)ﾉ</li>
+<li><a href="http://hydra.nixos.org/build/31821726/download/1/nixpkgs/manual.html#ex-dockerTools-buildImage">dockerTools</a>: build docker images from Nix expressions</li>
+<li><a href="https://github.com/NixOS/nixpkgs/pull/7701">Multiple outputs PR on the point of being merged</a></li>
+</ul>
+</div>
+<div id="this-month-in-nix---2" class="slide section level1">
+<h1>This month in Nix - 2</h1>
+<h2 id="nixos-reddit-selection">NixOS Reddit selection</h2>
+<ul class="incremental">
+<li><a href="http://blog.tinco.nl/2016/02/05/nixos-on-digital-ocean.html">NixOS on Digital Ocean</a></li>
+<li><a href="http://www.mpscholten.de/docker/2016/01/27/you-are-most-likely-misusing-docker.html">Using Nix instead of Docker</a></li>
+<li><a href="https://www.reddit.com/r/NixOS/comments/441ymh/nixos_users_tell_me_what_are_the_cons/">What are NixOS cons</a></li>
+<li><a href="https://www.reddit.com/r/NixOS/comments/45jptz/migration_to_nixos/">Migration to NixOS</a></li>
+<li><a href="https://www.youtube.com/watch?v=RXV0Y5Bn-QQ">Setting up your own build farm</a> (<a href="https://github.com/peti/hydra-tutorial">Repository</a>)</li>
+</ul>
+</div>
+<div id="this-month-in-nix---3" class="slide section level1">
+<h1>This month in Nix - 3</h1>
+<h2 id="mailing-list-selection">Mailing list selection</h2>
+<ul class="incremental">
+<li><a href="http://lists.science.uu.nl/pipermail/nix-dev/2016-February/019450.html">Using Nix as the package manager for a new language</a></li>
+<li><a href="http://lists.science.uu.nl/pipermail/nix-dev/2016-January/019120.html">Flattening pkgs tree</a></li>
+<li><a href="http://lists.science.uu.nl/pipermail/nix-dev/2016-February/019459.html">Wiki is dead</a></li>
+<li><a href="http://lists.science.uu.nl/pipermail/nix-dev/2016-February/019557.html">CVE-2015-7547 stdenv-changing fix merged on master and 15.09</a></li>
+</ul>
+</div>
+<div id="this-month-in-nix---4" class="slide section level1">
+<h1>This month in Nix - 4</h1>
+<h2 id="tokyo-nixos-meetup-activities">Tokyo NixOS Meetup activities</h2>
+<ul class="incremental">
+<li><a href="http://www.ospn.jp/osc2016-spring/">OSC Tokyo Spring</a> on Feb 26 - 27, everybody welcome to join!</li>
+<li>Simple wallpapers (Welcoming contributions!)</li>
+<li>Nix goodies</li>
+<li><a href="https://github.com/NixOS/nixpkgs/pull/11254">Japanese input done right! (almost)</a></li>
+<li><a href="https://github.com/Tokyo-NixOS/Tokyo-NixOS-Meetup-Wiki/wiki">Japanese Wiki</a>: new pages: Install &amp; Nix internals!</li>
+</ul>
+</div>
+<div id="understand-nix-in-10-minuts" class="slide section level1">
+<h1>Understand Nix in 10 minuts</h1>
+<ul class="incremental">
+<li>Nix: compiler for a functional package centric DSL
+<ul class="incremental">
+<li>functional = lazy + pure + deterministic</li>
+<li>pure = no missing dependency</li>
+<li>deterministic = binary install for free</li>
+<li>lazy = lightweight and fast</li>
+<li>DSL = easy customization</li>
+<li>package isolation = atomic upgrades + easy rollback + no Dependency hell + impossible to break system by installing a package</li>
+<li>not limited to system packages, Nix can package almost anything (great packaging of hackage)</li>
+<li>can be thought as &quot;One package manager to rule them all&quot; &quot;Make on steroids&quot;</li>
+</ul></li>
+<li>NixOS: an OS is packages + configuration, NixOS is Nix extended with a configuration DSL (module system)
+<ul class="incremental">
+<li>declarative configuration with typed properties</li>
+<li>lightweight containers (based on systemd nspawn)</li>
+<li>easy to add custom services</li>
+</ul></li>
+</ul>
+</div>
+<div id="packaging-101-packaging-basics" class="slide section level1">
+<h1>Packaging 101: packaging basics</h1>
+<p>Foreword:</p>
+<ul class="incremental">
+<li>Reading the <a href="http://nixos.org/nixpkgs/manual/">contributor guide</a> is always a good idea</li>
+<li>Basic understanding of the Nix language can help a lot, <a href="https://nixcloud.io/tour/?id=1">a tour of nix</a> and the <a href="http://nixos.org/nix/manual/#chap-writing-nix-expressions">manual</a> are great resources</li>
+</ul>
+<p>Basic workflow:</p>
+<ul class="incremental">
+<li>get <a href="https://github.com/NixOS/nixpkgs">nixpkgs</a></li>
+<li>create a package file in the somewhere in <code>pkgs/</code></li>
+<li>add the package entry in <code>pkgs/top-level/all-packages.nix</code></li>
+<li>build the package and test</li>
+</ul>
+</div>
+<div id="packaging-101-getting-nixpkgs" class="slide section level1">
+<h1>Packaging 101: getting nixpkgs</h1>
+<ul class="incremental">
+<li>go to <a href="https://github.com/NixOS/nixpkgs">github nixpkgs</a> and click the Fork button</li>
+<li>go to the forked repository and get the clone url</li>
+<li><p>clone to a local machine</p>
+<pre><code>$ git clone git@github.com:USER/nixpkgs.git</code></pre></li>
+<li><p>Or just clone the official nixpkgs if you have no github account or don't plan to submit PRs.</p></li>
+</ul>
+<h2 id="exercices">Exercices</h2>
+<ul class="incremental">
+<li>check the structure under the <code>pkgs/</code>.</li>
+<li>check <code>pkgs/top-level/all-packages.nix</code>.</li>
+</ul>
+</div>
+<div id="packaging-101-create-a-custom-hello-package-derivation" class="slide section level1">
+<h1>Packaging 101: create a custom hello package (derivation)</h1>
+<ul class="incremental">
+<li>check the default hello package in <code>pkgs/applications/misc/hello/default.nix</code></li>
+<li><p>create a dedicated branch</p>
+<pre><code>$ git checkout -b pkg/my-hello</code></pre></li>
+<li><p>create <code>my-hello</code> folder in misc</p>
+<pre><code>$ mkdir pkgs/applications/misc/my-hello/</code></pre></li>
+<li><p>copy the hello derivation to my-hello</p>
+<pre><code>$ cp pkgs/applications/misc/{,my-}hello/default.nix</code></pre></li>
+<li><p>edit <code>pkgs/applications/misc/my-hello/default.nix</code> and change the derivation name to my-hello</p></li>
+</ul>
+<h2 id="exercices-1">Exercices</h2>
+<ul class="incremental">
+<li>Find what meta maintainers and licence fields refer to.</li>
+<li>Make yourself as the maintainer of <code>my-hello</code>.</li>
+</ul>
+</div>
+<div id="packaging-101-register-the-package-to-all-packages.nix" class="slide section level1">
+<h1>Packaging 101: register the package to all-packages.nix</h1>
+<ul class="incremental">
+<li>add a my-hello entry to <code>all-packages.nix</code></li>
+</ul>
+<h2 id="exercice">Exercice</h2>
+<ul class="incremental">
+<li>figure the relation between the package name, the package path and the <code>all-packages.nix</code> entry name.</li>
+<li>move the version in a dedicated attribute.
+<ul class="incremental">
+<li>(tip: check the tilda package)</li>
+</ul></li>
+</ul>
+</div>
+<div id="packaging-101-build-the-package" class="slide section level1">
+<h1>Packaging 101: build the package</h1>
+<ul class="incremental">
+<li><p>build the package</p>
+<pre><code>$ nix-build -A my-hello</code></pre></li>
+<li><p>run it!</p>
+<pre><code>$ ./result/bin/hello</code></pre></li>
+</ul>
+<h2 id="exercice-1">Exercice</h2>
+<ul class="incremental">
+<li>Check and note the my-hello nix store hash.
+<ul class="incremental">
+<li>(tip: result is a symlink to the store)</li>
+</ul></li>
+<li>Change my-hello version to 2.9
+<ul class="incremental">
+<li>(tip: <code>man nix-prefetch-url</code>).</li>
+</ul></li>
+<li>Compare the first my-hello and 2.9 my-hello store hash.</li>
+<li>Can you still run my-hello 2.10?</li>
+</ul>
+</div>
+<div id="packaging-101-bonus-exercice" class="slide section level1">
+<h1>Packaging 101: Bonus Exercice</h1>
+<p>Find a package not yet available in nixpkgs and package it.</p>
+</div>
+<div id="meetup-future" class="slide section level1">
+<h1>Meetup future</h1>
+<ul class="incremental">
+<li>Any idea on how to improve the meetup?</li>
+<li>Better times, better places?</li>
+<li>3 places: meetup, connpass, doorkeeper; Meetup currently as a the main place</li>
+<li>more activities like OSC and other groups</li>
+<li>evolve to a &quot;NixOS user group&quot;?</li>
+</ul>
+</div>
+<div id="useful-links" class="slide section level1">
+<h1>Useful links</h1>
+<ul class="incremental">
+<li><a href="http://nixos.org/nixos/manual/">NixOS Manual</a></li>
+<li><a href="http://nixos.org/nixos/packages.html">Packages Search</a></li>
+<li><a href="http://nixos.org/nixos/packages.html">Configuration Options Search</a></li>
+<li><a href="http://nixos.org/nixpkgs/manual/">Contributor Guide</a></li>
+<li><a href="https://nixos.org/wiki/Main_Page">Wiki</a></li>
+<li><a href="http://nixos.org/nixos/manual/sec-installation.html">Install tutorial</a></li>
+<li><a href="https://nixos.org/wiki/Installing_NixOS_in_a_VirtualBox_guest">Install in virtualbox</a></li>
+<li><a href="https://github.com/Tokyo-NixOS/Tokyo-NixOS-Meetup-Wiki/wiki">Japanese Wiki</a></li>
+</ul>
+</div>
+</body>
+</html>

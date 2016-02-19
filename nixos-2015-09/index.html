@@ -1,0 +1,374 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <meta name="author" content="Tokyo NixOS Meetup" />
+  <title>NixOS Basics</title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" type="text/css" media="screen, projection, print"
+    href="http://www.w3.org/Talks/Tools/Slidy2/styles/slidy.css" />
+  <script src="http://www.w3.org/Talks/Tools/Slidy2/scripts/slidy.js"
+    charset="utf-8" type="text/javascript"></script>
+</head>
+<body>
+<div class="slide titlepage">
+  <h1 class="title">NixOS Basics</h1>
+  <p class="author">
+Tokyo NixOS Meetup
+  </p>
+  <p class="date">2015, 7 September</p>
+</div>
+<div id="sales-pitch" class="slide section level1">
+<h1>Sales pitch</h1>
+<blockquote>
+<p>The Purely Functional Linux Distribution</p>
+</blockquote>
+<blockquote>
+<p><a href="https://nixos.org/">NixOS</a> is a Linux distribution with a unique approach to package and configuration management. Built on top of the Nix package manager, it is completely declarative, makes upgrading systems reliable, and has many other <a href="https://nixos.org/nixos/about.html">advantages</a>.</p>
+</blockquote>
+</div>
+<div id="nixos-glossary" class="slide section level1">
+<h1>NixOS Glossary</h1>
+<ul>
+<li>Nix: The Nix package manager</li>
+<li>NixOS: Linux distribution using Nix</li>
+<li>Derivation: a package build action</li>
+<li>Nix expression language: language to write derivations or configuration files</li>
+<li>Channel: a way to distribute derivations and associated binaries</li>
+<li>Nix store: local place where derivations are installed, <code>/nixos/store</code></li>
+<li>nixpkgs: nix packages <a href="https://github.com/NixOS/nixpkgs">github repository</a></li>
+<li>Hydra: Nix packages build farm</li>
+</ul>
+</div>
+<div id="specificities" class="slide section level1">
+<h1>Specificities</h1>
+<ul>
+<li>Declarative configuration</li>
+<li>nixpkgs</li>
+<li>Multiple software versions</li>
+<li>Multi-user support</li>
+<li>Atomic upgrades</li>
+<li>Rollback</li>
+<li>Functional</li>
+<li>Deterministic</li>
+<li>Complete dependencies</li>
+<li>Binary and source based</li>
+</ul>
+</div>
+<div id="declarative-configuration" class="slide section level1">
+<h1>Declarative configuration</h1>
+<ul>
+<li>Main configuration file is <code>/etc/nixos/configuration.nix</code></li>
+<li><code>/etc/nixos/hardware-configuration.nix</code> contains hardware specific settings and is automatically generated during install.<br />
+Edit at own risk.</li>
+<li>Configuration is wrote in <a href="http://nixos.org/nix/manual/#ch-expression-language">Nix expression language</a></li>
+<li>Nix expression language is very rich, and configurations can be turned in programs for more modularity</li>
+<li>Running the <code>nixos-rebuild</code> command update the system based on <code>configuration.nix, example:</code></li>
+</ul>
+<pre><code>nixos-rebuild switch</code></pre>
+<ul>
+<li><a href="https://nixos.org/nixos/manual/sec-configuration-syntax.html">Declarative configuration manual</a></li>
+</ul>
+</div>
+<div id="configuration-options" class="slide section level1">
+<h1>Configuration Options</h1>
+<ul>
+<li><a href="https://nixos.org/nixos/options.html">Available options search engine</a></li>
+<li><code>nixos-option</code> command:</li>
+</ul>
+<pre><code>nixos-option services.xserver.enable</code></pre>
+<ul>
+<li><code>nix-repl</code> command:</li>
+</ul>
+<pre><code>nix-repl &#39;&lt;nixos&gt;&#39;
+config.services.xserver</code></pre>
+</div>
+<div id="configuration-recipes-16" class="slide section level1">
+<h1>Configuration Recipes 1/6</h1>
+<p>Import separate files:</p>
+<pre><code>  imports = [ 
+    ./hardware-configuration.nix
+    ./software.nix
+    ./fonts.nix
+    ./containers.nix
+  ];</code></pre>
+</div>
+<div id="configuration-recipes-26" class="slide section level1">
+<h1>Configuration Recipes 2/6</h1>
+<p>Global packages installation:</p>
+<pre><code>environment.systemPackages = [ pkgs.emacs pkgs.vim ];</code></pre>
+<p>or</p>
+<pre><code>environment.systemPackages = with pkgs; [ emacs vim ];</code></pre>
+</div>
+<div id="configuration-recipes-36" class="slide section level1">
+<h1>Configuration Recipes 3/6</h1>
+<p>Enabling japanese input:</p>
+<pre><code>  programs = {
+    ibus.enable  = true;
+    ibus.plugins = [ pkgs.ibus-anthy pkgs.mozc ];
+  };</code></pre>
+<p>or</p>
+<pre><code>  programs = {
+    ibus = {
+      enable  = true;
+      plugins = [ pkgs.ibus-anthy pkgs.mozc ];
+    };
+  };</code></pre>
+</div>
+<div id="configuration-recipes-46" class="slide section level1">
+<h1>Configuration Recipes 4/6</h1>
+<p>Enabling Apache web server:</p>
+<pre><code>  services = {
+    httpd = {
+      enable = true;
+      adminAddr = &quot;alice@example.org&quot;;
+      documentRoot = &quot;/webroot&quot;;
+    };
+  };</code></pre>
+</div>
+<div id="configuration-recipes-56" class="slide section level1">
+<h1>Configuration Recipes 5/6</h1>
+<p>Using functions:</p>
+<pre><code>  services.httpd.virtualHosts =
+    let
+      makeVirtualHost = { name, root }:
+        { hostName = name;
+          documentRoot = root;
+          adminAddr = &quot;alice@example.org&quot;;
+        };
+    in map makeVirtualHost
+      [ { name = &quot;example.org&quot;; root = &quot;/sites/example.org&quot;; }
+        { name = &quot;example.com&quot;; root = &quot;/sites/example.com&quot;; }
+        { name = &quot;example.gov&quot;; root = &quot;/sites/example.gov&quot;; }
+        { name = &quot;example.nl&quot;;  root = &quot;/sites/example.nl&quot;; }
+      ];</code></pre>
+</div>
+<div id="configuration-recipes-66" class="slide section level1">
+<h1>Configuration Recipes 6/6</h1>
+<p>Using Conditionals:</p>
+<pre><code>  environment.systemPackages =
+    if config.services.xserver.enable then
+      [ pkgs.firefox
+        pkgs.thunderbird
+      ]
+    else
+      [ ];</code></pre>
+</div>
+<div id="nixpkgs" class="slide section level1">
+<h1>nixpkgs</h1>
+<ul>
+<li><a href="https://github.com/NixOS/nixpkgs">nixpkgs</a> is the github repository containing all nixos packages</li>
+<li>Every derivation is a nix expression</li>
+<li>Nix expressions are lazy, installing a package is forcing the evaluation of a derivation.</li>
+<li>packages are classified in sections under <a href="https://github.com/NixOS/nixpkgs/tree/master/pkgs">/pkgs</a></li>
+<li>configuration options are in <a href="https://github.com/NixOS/nixpkgs/tree/master/nixos/modules">/modules</a></li>
+<li>last version is the norm, but multiple versions available when meaningful (compilers, ..)</li>
+<li>adding packages or modules is submitting a pull-request</li>
+</ul>
+</div>
+<div id="nixpkgs-1" class="slide section level1">
+<h1>nixpkgs</h1>
+<ul>
+<li><a href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/applications/misc/hello/ex-2/default.nix">simple derivation</a>:</li>
+</ul>
+<pre><code>{ stdenv, fetchurl }:
+
+stdenv.mkDerivation rec {
+  name = &quot;hello-2.10&quot;;
+
+  src = fetchurl {
+    url = &quot;mirror://gnu/hello/${name}.tar.gz&quot;;
+    sha256 = &quot;0ssi1wpaf7plaswqqjwigppsg5fyh99vdlb9kzl7c9lng89ndq1i&quot;;
+  };
+
+  doCheck = true;
+
+  meta = {
+    description = &quot;A program that produces a familiar, friendly greeting&quot;;
+    longDescription = &#39;&#39;
+      GNU Hello is a program that prints &quot;Hello, world!&quot; when you run it.
+      It is fully customizable.
+    &#39;&#39;;
+    homepage = http://www.gnu.org/software/hello/manual/;
+    license = stdenv.lib.licenses.gpl3Plus;
+    maintainers = [ stdenv.lib.maintainers.eelco ];
+    platforms = stdenv.lib.platforms.all;
+  };
+}</code></pre>
+</div>
+<div id="nixpkgs-2" class="slide section level1">
+<h1>nixpkgs</h1>
+<ul>
+<li>nixpkgs also manage language specific packages: <a href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/top-level/haskell-packages.nix">haskell</a>, <a href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/top-level/python-packages.nix">python</a>, <a href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/top-level/php-packages.nix">php</a>, ...
+<ul>
+<li>has advantages: binaries, flexible management, no dependency hell, external dependencies</li>
+</ul></li>
+<li><a href="https://github.com/NixOS/nixpkgs/tree/master/pkgs/build-support">helpers functions</a> are available to make derivation creation even simpler.</li>
+</ul>
+</div>
+<div id="nix-store" class="slide section level1">
+<h1>Nix Store</h1>
+<ul>
+<li>locally located in <code>/nix/store</code></li>
+<li>read only</li>
+<li>contains installed derivations (and uninstalled derivations not yet garbage-collected)</li>
+<li>every package is isolated in its own folder using the <code>/nix/store/HASH-NAME-VERSION/</code> pattern</li>
+<li>the HASH part is the only important for the system</li>
+<li>the hash is computed using all the inputs of the derivation</li>
+</ul>
+<pre><code>ls -d /nix/store/*/ | grep firefox
+/nix/store/3qv1pxgfb8afgzv1mn8ik7k6wibm9ixr-firefox-with-plugins-40.0.2/
+/nix/store/48j5d2432lfl7b6qky20zvqnx4limmln-firefox-40.0.3/
+/nix/store/9sa1yd509ria6wdqdb1170wsr8q46rvh-firefox-with-plugins-40.0.2/
+/nix/store/a4rzv3bpvf74i6c1bysg2dk4wik7s4wn-firefox-with-plugins-40.0.3/
+/nix/store/cs44vfr4ap1sw2f1mi9m0gf6vyb3h7y9-firefox-with-plugins-40.0.3/
+/nix/store/cxnrfl4mns2i41h5mna0ig9xs7ckcf5c-firefox-with-plugins-39.0/
+/nix/store/da9ni00z5hkni0aaz0n9q64crxvwy2kp-firefox-with-plugins-40.0.2/
+/nix/store/gmw42qaghjv9xkrq83ay0k18jfysfrqi-firefox-40.0.3/
+/nix/store/jlygv8k720s252qf9c0hdd2riai4a900-firefox-40.0.2/
+/nix/store/m6flvkyagk20sig628g5ziwaslpiimrn-firefox-39.0/
+/nix/store/nna0d4wdbfp3z5azjjn4jl5089f741fc-firefox/
+/nix/store/pzni8z4s8d43j5486pmrlfl2dmwwxzqi-firefox-40.0.2/
+/nix/store/rrnjk0vqyng331z78c2dv1nh5swyks96-firefox-40.0.2/
+/nix/store/vvlc51dbrpadm2qz9pcb3pz7yvmzf2c9-firefox/</code></pre>
+</div>
+<div id="nix-store-1" class="slide section level1">
+<h1>Nix Store</h1>
+<ul>
+<li>A store folder contains <em>all</em> the files of the package</li>
+</ul>
+<pre><code>tree /nix/store/nmg89z2dxrx87wdqfhfbgbm3jzvczwq0-tree-1.7.0/
+/nix/store/nmg89z2dxrx87wdqfhfbgbm3jzvczwq0-tree-1.7.0/
+├── bin
+│   └── tree
+└── share
+    └── man
+        └── man1
+            └── tree.1.gz</code></pre>
+<ul>
+<li>Active packages paths are merged in an environment derivation <code>/nix/store/HASH-system-path</code> that is in turn used by the main nixos derivation <code>/nix/store/HASH-nixos-LABEL</code></li>
+<li>Assembled nixos environments can be found in <code>/nix/var/nix/profiles/</code></li>
+<li>uninstalling a derivation just unlink it from user environment</li>
+<li>nixos garbage-collection can be used (<a href="http://nixos.org/nix/manual/#sec-nix-collect-garbage">nix-collect-garbage</a> command) to delete unused derivations from the disk</li>
+<li>rollbacks are possible with <code>nixos-rebuild switch --rollback</code> or at machine boot menu</li>
+</ul>
+</div>
+<div id="channels" class="slide section level1">
+<h1>Channels</h1>
+<ul>
+<li>Channels are how NixOS distribute derivations and binaries</li>
+<li>There is 3 kinds of channels
+<ul>
+<li><em>Stable channels</em> - released about twice a year, get only bug fixes and conservative minor upgrades after releases</li>
+<li><em>Unstable channel</em> - aka rolling release</li>
+<li><em>Small channels</em> - available with stable and unstable, they contains fewer packages and get updated more frequently. Suitable for servers.</li>
+</ul></li>
+<li>It is generally safe to switch between channels</li>
+<li>Channels can be found on github as branches on a <a href="https://github.com/NixOS/nixpkgs-channels">dedicated repository</a></li>
+</ul>
+</div>
+<div id="channel-update-workflow" class="slide section level1">
+<h1>Channel Update Workflow</h1>
+<ul>
+<li><a href="http://hydra.nixos.org/">Hydra</a> is the build farm for nixos/nixpkgs</li>
+</ul>
+<ol style="list-style-type: decimal">
+<li>Jobs are set in <a href="http://hydra.nixos.org/">Hydra</a> that grab nixpkgs expressions dedicated to <a href="https://github.com/NixOS/nixpkgs/blob/master/nixos/release-combined.nix">channel building</a></li>
+<li>When a job succeeds, the binary cache server download the binaries from Hydra</li>
+<li>When binaries are all downloaded the channel is updated</li>
+</ol>
+<ul>
+<li>This assures that all packages correctly build and that binary cache is available</li>
+</ul>
+</div>
+<div id="nix-shell" class="slide section level1">
+<h1>nix-shell</h1>
+<ul>
+<li><code>nix-shell</code> is a tool that start a clean shell</li>
+<li>the system use it when building derivations</li>
+<li>because the shell is pure(without any packages beside stdenv), derivations are assured to have complete dependencies it they build</li>
+</ul>
+</div>
+<div id="nix-shell-1" class="slide section level1">
+<h1>nix-shell</h1>
+<ul>
+<li><code>nix-shell</code> has a <code>-p</code> argument that take a list of packages to bring in the shell</li>
+<li>this is allow quick testing of packages</li>
+</ul>
+<pre><code># java -version
+The program ‘java’ is currently not installed. It is provided by
+several packages. You can install it by typing one of the following:
+  nix-env -i jdk
+  nix-env -i jdk7
+# nix-shell -p java
+# java -version
+openjdk version &quot;1.8.0_60&quot;
+OpenJDK Runtime Environment (build 1.8.0_60-24)
+OpenJDK 64-Bit Server VM (build 25.60-b23, mixed mode)
+# exit
+# nix-shell -p java7 
+# java -version
+openjdk version &quot;1.7.0-80&quot;
+OpenJDK Runtime Environment (build 1.7.0-80-b32)
+OpenJDK 64-Bit Server VM (build 24.80-b11, mixed mode)</code></pre>
+<ul>
+<li><code>--pure</code> flags turn the shell pure</li>
+<li>nix files can be passed to <code>nix-shell</code> to set up a fully customized shell
+<ul>
+<li>very useful for development</li>
+</ul></li>
+</ul>
+</div>
+<div id="non-determinism" class="slide section level1">
+<h1>Non Determinism</h1>
+<ul>
+<li>To have consistent derivations hash across machines, it is very important for the build process to be as deterministic as possible</li>
+<li>NixOS use tricks to take out non-determinism (try <code>uname -a</code>)</li>
+<li>Nix store derivation hash is computed by all inputs of the derivation (including dependencies)</li>
+</ul>
+</div>
+<div id="functional-distribution" class="slide section level1">
+<h1>Functional distribution?</h1>
+<ul>
+<li>laziness - derivations are <code>thunks</code> evaluated when installed</li>
+<li>no global state - derivations outputs depends only on the inputs</li>
+<li>purity - derivations don't have side effect (no changes to <code>/etc</code> or <code>/bin</code>)</li>
+<li>no mutability - installing a modified derivation will not change other versions of the derivation</li>
+</ul>
+</div>
+<div id="containers" class="slide section level1">
+<h1>Containers</h1>
+<ul>
+<li><code>nix-container</code> can be used to create lightweight containers</li>
+<li>containers can also be defined in the global configuration</li>
+<li>Useful for web services and web development</li>
+<li><a href="https://nixos.org/nixos/manual/ch-containers.html">Container management manual</a></li>
+</ul>
+</div>
+<div id="tips" class="slide section level1">
+<h1>Tips</h1>
+<ul>
+<li>for single user environment, using <code>configuration.nix</code> to manage installed software is recommended</li>
+<li>having a local fork of <code>nixpkgs</code> is useful for trying and submitting new packages</li>
+<li>having <code>nix-shell</code> templates for languages you often use</li>
+<li>for installing packages <a href="https://github.com/madjar/nox"><code>nox</code></a> is simpler to use than <code>nix-env</code></li>
+</ul>
+</div>
+<div id="useful-resources" class="slide section level1">
+<h1>Useful resources</h1>
+<ul>
+<li><a href="http://nixos.org/nixos/manual/">NixOS Manual</a></li>
+<li><a href="http://nixos.org/nixos/packages.html">Packages Search</a></li>
+<li><a href="http://nixos.org/nixos/packages.html">Configuration Options Search</a></li>
+<li><a href="http://nixos.org/nixpkgs/manual/">Contributor Guide</a></li>
+<li><a href="https://nixos.org/wiki/Main_Page">Wiki</a></li>
+<li><a href="http://nixos.org/nixos/manual/sec-installation.html">Install tutorial</a></li>
+<li><a href="https://nixos.org/wiki/Installing_NixOS_in_a_VirtualBox_guest">Install in virtualbox</a></li>
+</ul>
+</div>
+</body>
+</html>
