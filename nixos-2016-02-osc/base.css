@@ -1,0 +1,21 @@
+div.slide{ 
+  background-image: url(nix-hex.png);
+  background-size: 3em;
+  background-repeat: no-repeat;
+  background-position: 99% .2em;
+}
+div.slide h1{ 
+  font-size: 1.4em;
+  margin: 0 0 2em 0;
+  text-align:center;
+  padding :.5em;
+}
+div.slide li p{ margin:0; }
+div.slide pre{ 
+  padding: 0.6em;
+}
+div.slide a{ 
+  font-weight: bold;
+  text-decoration: underline;
+}
+div.slide li ul li{ font-style: normal; }

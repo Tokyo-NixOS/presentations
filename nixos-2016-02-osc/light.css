@@ -1,0 +1,19 @@
+html{
+  background: #fff;
+}
+div.slide{ 
+  color: #222; 
+}
+div.slide h1{ 
+  color: #222;
+  text-shadow: 0px 0px 2px #666;
+  border-bottom: 1px solid #ddd;
+}
+div.slide pre{ 
+  background-color: #ddd;
+  color: #333;
+  border: 2px solid #666;
+}
+div.slide a{ 
+  color: #389; 
+}

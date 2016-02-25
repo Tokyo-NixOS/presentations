@@ -1,0 +1,30 @@
+html{
+  background: #222;
+}
+div.slide{ 
+  color: #fff; 
+}
+div.slide h1{ 
+  color: #fff;
+  text-shadow: 0px 0px 2px #ccc;
+  border-bottom: 1px solid #444;
+}
+div.slide pre{ 
+  background-color: #333;
+  color: #ddd;
+  border: 2px solid #ddd;
+}
+div.slide a{ 
+  color: #8cf; 
+}
+div.toolbar{
+  background: #333;
+  color: #888;
+}
+div.toolbar a,
+div.toolbar a:hover,
+div.toolbar a:visited,
+div.toolbar a:active,
+div.toolbar a:link{ 
+  color: #8cf; 
+}

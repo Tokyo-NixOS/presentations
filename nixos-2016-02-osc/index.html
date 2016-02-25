@@ -1,0 +1,580 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <meta name="author" content="OSC 2016 Tokyo/Spring" />
+  <title>関数型Linux: NixOSの仕組みと特徴の紹介</title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" type="text/css" media="screen, projection, print"
+    href="http://www.w3.org/Talks/Tools/Slidy2/styles/slidy.css" />
+  <link rel="stylesheet" type="text/css" media="screen, projection, print"
+   href="base.css" />
+  <link rel="stylesheet" type="text/css" media="screen, projection, print"
+   href="dark.css" />
+  <script src="http://www.w3.org/Talks/Tools/Slidy2/scripts/slidy.js"
+    charset="utf-8" type="text/javascript"></script>
+</head>
+<body>
+<div class="slide titlepage">
+  <h1 class="title">関数型Linux: NixOSの仕組みと特徴の紹介</h1>
+  <p class="author">
+OSC 2016 Tokyo/Spring
+  </p>
+  <p class="date">2016年2月26日</p>
+</div>
+<div id="自己紹介" class="slide section level1">
+<h1>自己紹介</h1>
+<ul class="incremental">
+<li>サニエ エリック</li>
+<li>東京NixOSミートアップオーガナイザー</li>
+</ul>
+</div>
+<div id="アジェンダ" class="slide section level1">
+<h1>アジェンダ</h1>
+<ul class="incremental">
+<li>Nixパッケージマネージャーの紹介 (20分)</li>
+<li>NixOSリナックスの紹介 (10分)</li>
+<li>東京NixOSミートアップの紹介 (5分)</li>
+<li>質問タイム</li>
+<li>いつでも気軽に質問してください!</li>
+</ul>
+</div>
+<div id="パッケージマネージャーとは" class="slide section level1">
+<h1>パッケージマネージャーとは</h1>
+<ul class="incremental">
+<li>ファイル・プログラムをインストール・アップグレード・アンインストールをするソフトウェア</li>
+<li>依存関係解決</li>
+<li>apt, yum, pacman</li>
+<li>パッケージ操作にリスクがあります
+<ul class="incremental">
+<li>ルート権限が必要</li>
+</ul></li>
+<li>依存管理は難しい
+<ul class="incremental">
+<li>依存地獄</li>
+<li>パッケージの代わりにコンテナーでソフトウェア配布が最近増えてる</li>
+</ul></li>
+</ul>
+</div>
+<div id="nix-関数型パッケージマネージャー" class="slide section level1">
+<h1>Nix: 関数型パッケージマネージャー</h1>
+<ul class="incremental">
+<li>Eelco Dolstraの研究が原点</li>
+<li>2006年に博士論文発表</li>
+<li>POSIX準拠 (LinuxとOS Xで利用できます)</li>
+<li>主にC++で書かれている</li>
+<li>良く出来た<a href="http://nixos.org/nix/manual/">マニュアル</a></li>
+<li>LGPLライセンス</li>
+</ul>
+</div>
+<div id="nix-特徴" class="slide section level1">
+<h1>Nix: 特徴</h1>
+<ul class="incremental">
+<li>パッケージの複数バージョン</li>
+<li>一般ユーザパッケージインストール</li>
+<li>パッケージカスタマイズ</li>
+<li>依存関係完結の保証</li>
+<li>パッケージ完全隔離</li>
+<li>ソースビルドとバイナリインストール対応</li>
+<li>ビルド再現性の保証</li>
+<li>並行ビルド</li>
+<li>低リスク</li>
+<li>nix-shell</li>
+</ul>
+</div>
+<div id="nix-遅延評価純粋関数型パッケージマネジャー" class="slide section level1">
+<h1>Nix: 遅延評価純粋関数型パッケージマネジャー</h1>
+<ul class="incremental">
+<li>関数型:
+<ul class="incremental">
+<li>パッケージは関数であり、依存は引数</li>
+<li>インストールされたパッケージのファイルは絶対に変更されない</li>
+<li>→ 安全性 (依存関係完結の保証、ロールバック)</li>
+</ul></li>
+<li>純粋:
+<ul class="incremental">
+<li>関数の結果（パッケージ）は引数のみ（依存関係）で決まります</li>
+<li>→ 再現性</li>
+</ul></li>
+<li>遅延評価
+<ul class="incremental">
+<li>パッケージを簡単カスタマイズできます、パーフォーマンス向上</li>
+<li>→ 柔軟性</li>
+</ul></li>
+</ul>
+</div>
+<div id="nix-仕組み" class="slide section level1">
+<h1>Nix: 仕組み</h1>
+<ul class="incremental">
+<li>パッケージ&quot;レシピ&quot;関数（導出）</li>
+<li>パッケージレシピはNix言語で書かれています</li>
+<li>Nix言語はパッケージ用のドメイン固有言語</li>
+<li>NixはNix言語のコンパイラー</li>
+<li>パッケージをNixストアにインストール</li>
+<li>導出コンパイル = パッケージのビルド + ストアへインストール</li>
+</ul>
+</div>
+<div id="nix-導出パッケージレシピの例" class="slide section level1">
+<h1>Nix: 導出(パッケージレシピ)の例</h1>
+<ul class="incremental">
+<li><a href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/applications/misc/hello/default.nix">シンプルな例</a></li>
+<li><a href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/tools/archivers/cpio/default.nix">パッチの利用例</a></li>
+<li><a href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/servers/http/apache-httpd/2.4.nix">複雑なパッケージ</a></li>
+</ul>
+</div>
+<div id="nix-nixストア" class="slide section level1">
+<h1>Nix: Nixストア</h1>
+<ul class="incremental">
+<li>Nixはパッケージを必ずNixストアにインストールします</li>
+<li>ストア内に同じパッケージの複数バージョンが存在できます</li>
+<li>パッケージはストア内に導出ハッシュで特定されたフォルダーにインストールされます</li>
+<li><p>隔離されたフォルダーにパッケージのすべてのファイルが入ります</p>
+<pre><code>$ readlink $(which tree)
+/nix/store/zzljry2r5w14rmvg3p9lz7ym326rfcpp-tree-1.7.0/bin/tree
+
+$ tree /nix/store/zzljry2r5w14rmvg3p9lz7ym326rfcpp-tree-1.7.0/
+/nix/store/zzljry2r5w14rmvg3p9lz7ym326rfcpp-tree-1.7.0/
+├── bin
+│   └── tree
+└── share
+    └── man
+        └── man1
+            └── tree.1.gz</code></pre></li>
+<li>パッケージは他のパッケージファイルを絶対に変更できない</li>
+<li><p>Nixストアは読み込み専用ファイルシステムでマウントされています</p></li>
+</ul>
+</div>
+<div id="nix-環境" class="slide section level1">
+<h1>Nix: 環境</h1>
+<ul class="incremental">
+<li>特定なNixストアパッケージを環境にリンクする仕組み</li>
+<li>環境は自動的にバージョニングされます</li>
+<li><p>世代はコマンドでロールバックできます</p>
+<pre><code>$ nix-env --list-generations
+ 28   2016-01-31 07:23:34
+ 29   2016-01-31 18:03:26   
+ 30   2016-02-06 11:58:46   
+ 31   2016-02-15 10:42:21   
+ 32   2016-02-15 10:44:14   (current)
+
+$ nix-env --switch-generation 30</code></pre></li>
+</ul>
+</div>
+<div id="nix-ソースとバイナリ" class="slide section level1">
+<h1>Nix: ソースとバイナリ</h1>
+<ul class="incremental">
+<li>パッケージでインストールされるファイルは導出で決まります（再現性）</li>
+<li>導出のハッシュがわかれば、ストアフォルダーとインストールされるファイルを判別できます</li>
+<li>ハッシュを利用し、バイナリパッケージを特定できます</li>
+<li>再現性を利用し、導出を評価せずバイナリパッケージをインストールできます</li>
+</ul>
+</div>
+<div id="nix-システムパッケージ以外の管理" class="slide section level1">
+<h1>Nix: システムパッケージ以外の管理</h1>
+<ul class="incremental">
+<li>アプリケーションパッケージも対応（プログラミング言語）</li>
+<li><p>Haskellのサポートが特に進んでいる</p>
+<pre><code>$ nix-env -f &quot;&lt;nixpkgs&gt;&quot; -qaP -A haskellPackages | wc -l
+12014</code></pre></li>
+<li><p>Python等のパッケージもあります</p>
+<pre><code>$ nix-env -f &quot;&lt;nixpkgs&gt;&quot; -qaP -A python2Packages | wc -l
+1199
+
+$ nix-env -f &quot;&lt;nixpkgs&gt;&quot; -qaP -A python33Packages | wc -l
+996
+
+$ nix-env -f &quot;&lt;nixpkgs&gt;&quot; -qaP -A python32Packages | wc -l
+997</code></pre></li>
+</ul>
+</div>
+<div id="nix-万能ビルドシステム" class="slide section level1">
+<h1>Nix: 万能ビルドシステム</h1>
+<ul class="incremental">
+<li><p>NixOSマニュアルの生成</p>
+<pre><code>$ nix-build &#39;&lt;nixpkgs/nixos/release.nix&gt;&#39; -A manualPDF.x86_64-linux</code></pre></li>
+<li><p>NixOS ISOイメージの生成</p>
+<pre><code>$ nix-build &#39;&lt;nixpkgs/nixos/release.nix&gt;&#39; -A iso_minimal.x86_64-linux</code></pre></li>
+<li><p><a href="https://github.com/NixOS/nixpkgs/blob/master/nixos/tests/boot.nix">テスト</a>の実行</p></li>
+</ul>
+</div>
+<div id="nix-nix-shell" class="slide section level1">
+<h1>Nix: nix-shell</h1>
+<ul class="incremental">
+<li><p>インストールしてないプログラムのコマンド実行</p>
+<pre><code>$ nix-shell -p jdk --run &quot;java -version&quot;</code></pre></li>
+<li><p>特定のパッケージを含めた一時環境</p>
+<pre><code>$ nix-shell -p jdk -p subversion</code></pre>
+<pre><code>$ nix-shell -p jdk7 -p git --pure</code></pre></li>
+<li><p><a href="https://github.com/Tokyo-NixOS/Tokyo-NixOS-Meetup-Wiki/tree/master/nix-shells">開発環境用のnix-shellファイル</a></p></li>
+</ul>
+</div>
+<div id="nix-柔軟性" class="slide section level1">
+<h1>Nix: 柔軟性</h1>
+<ul class="incremental">
+<li><p>パッケージのカスタマイズ(引数)</p>
+<pre><code>libreNginx = nginx.override { openssl = libressl; }</code></pre></li>
+<li><p>パッケージのカスタマイズ（パッケージオーバーライド）</p>
+<pre><code>myNginx = nginx.overrideDerivation  (super:
+  name = &quot;nginx-git&quot;;
+  src = fetchFromGitHub {
+    sha256 = &quot;04s7xcgmi5g58lirr48vf203n1jwdxf981x1p6ysbax24qwhs2kd&quot;;
+    rev    = &quot;c0eb2f0759726f47bd06f5c8f46739f43ce55cac&quot;;
+    repo   = &quot;nginx&quot;;
+    owner  = &quot;nginx&quot;;
+  };
+})</code></pre></li>
+</ul>
+</div>
+<div id="nix-devops向けパッケージマネジャー" class="slide section level1">
+<h1>Nix: Devops向けパッケージマネジャー</h1>
+<ul class="incremental">
+<li>キーワード: 再現性、依存関係完結、パッケージ隔離</li>
+<li>closure: パッケージとその依存関係チェインのセット</li>
+<li><p><code>nix-copy-closure</code>コマンドで他マシンにclosureをコピーできる</p>
+<pre><code>$ nix-copy-closure --to alice@itchy.labs $(type -tp firefox)</code></pre>
+<pre><code>$ nix-copy-closure --from alice@itchy.labs /nix/store/0dj0503hjxy5mbwlafv1rsbdiyx1gkdy-subversion-1.4.4</code></pre></li>
+<li><p><code>nix-push</code>でNixストアclosureのバイナリキャッシュを生成できます</p>
+<pre><code>$ nix-push --dest /tmp/cache $(nix-build -A thunderbird)</code></pre>
+<ul class="incremental">
+<li>サーバを設定すれば、他のマシンからそのバイナリキャッシュは利用可能</li>
+</ul></li>
+</ul>
+</div>
+<div id="nixpkgs-パッケージレポジトリ" class="slide section level1">
+<h1>nixpkgs: パッケージレポジトリ</h1>
+<ul class="incremental">
+<li>Nixのパッケージレポジトリ</li>
+<li><a href="https://github.com/NixOS/nixpkgs">GitHubレポジトリ</a></li>
+<li>パッケージ追加とアップデートはプールリクエスト</li>
+<li>簡単に拡張</li>
+<li>77000コミット以上</li>
+<li>700コミッター以上</li>
+<li><img src="nixpkgs-data-h.png" title="fig:" alt="" /></li>
+</ul>
+</div>
+<div id="hydra-ビルドファーム" class="slide section level1">
+<h1>Hydra: ビルドファーム</h1>
+<ul class="incremental">
+<li><a href="http://hydra.nixos.org/">Hydra</a>はnixpkgsのビルドファーム</li>
+<li>兼継続的インテグレーション(CI)</li>
+<li>独自サーバにインストールできます</li>
+<li><a href="http://hydra.nixos.org/jobset/nixpkgs/trunk">nixpkgsのジョブセット</a></li>
+</ul>
+</div>
+<div id="nix-チャンネル" class="slide section level1">
+<h1>Nix: チャンネル</h1>
+<ul class="incremental">
+<li>チャンネルは特定な条件を満たすnixpkgsのバージョンを提供する仕組み
+<ul class="incremental">
+<li>Hydraでビルドとテスト成功</li>
+</ul></li>
+<li>種類はいくつかあります
+<ul class="incremental">
+<li>安定チャンネル、例 nixos-15.09</li>
+<li>不安定（開発）: nixos-unstable</li>
+<li>サーバ向け、例 nixos-15.09-small, nixos-unstable-small</li>
+</ul></li>
+<li>Nixストア内にはチャンネルの最新nixpkgsが入っていて、Nixに利用されます</li>
+<li>Hydraでパッケージはビルドされているため、自動的にバイナリパッケージは生成されます</li>
+</ul>
+</div>
+<div id="nix-パッケージインストール図" class="slide section level1">
+<h1>Nix: パッケージインストール図</h1>
+<div class="figure">
+<img src="nix-install-1.png" alt="" />
+
+</div>
+</div>
+<div id="nix-パッケージインストール図-1" class="slide section level1">
+<h1>Nix: パッケージインストール図</h1>
+<div class="figure">
+<img src="nix-install-2.png" alt="" />
+
+</div>
+</div>
+<div id="nix-パッケージインストール図-2" class="slide section level1">
+<h1>Nix: パッケージインストール図</h1>
+<div class="figure">
+<img src="nix-install-3.png" alt="" />
+
+</div>
+</div>
+<div id="nix-パッケージインストール図-3" class="slide section level1">
+<h1>Nix: パッケージインストール図</h1>
+<div class="figure">
+<img src="nix-install-4.png" alt="" />
+
+</div>
+</div>
+<div id="nix構造図" class="slide section level1">
+<h1>Nix構造図</h1>
+<div class="figure">
+<img src="nix-struct-global.png" alt="" />
+
+</div>
+</div>
+<div id="nix-nixos" class="slide section level1">
+<h1>Nix → NixOS</h1>
+<ul class="incremental">
+<li>一息</li>
+<li>質問？</li>
+</ul>
+</div>
+<div id="nixos-特徴" class="slide section level1">
+<h1>NixOS: 特徴</h1>
+<ul class="incremental">
+<li>宣言型設定 (モジュールシステム)</li>
+<li>パッケージロールバック</li>
+<li>アトミックアップグレード</li>
+<li>安定性</li>
+<li>軽量コンテナー (systemd-nspawn利用)</li>
+<li>DevOps向けツール (NixOps)</li>
+</ul>
+</div>
+<div id="nixos-osとは" class="slide section level1">
+<h1>NixOS: OSとは？</h1>
+<ul class="incremental">
+<li>OS = パッケージ + 設定</li>
+<li>パッケージ = Nix</li>
+<li>設定 = モジュールシステム</li>
+<li>NixOS = Nix + モジュールシステム</li>
+</ul>
+</div>
+<div id="nixos-ロールバック" class="slide section level1">
+<h1>NixOS: ロールバック</h1>
+<ul class="incremental">
+<li>コマンドでロールバック可能</li>
+<li><p>ブート画面でロールバック可能</p>
+<div class="figure">
+<img src="nixos-grub.png" alt="" />
+
+</div></li>
+</ul>
+</div>
+<div id="nixos-モジュールシステム" class="slide section level1">
+<h1>NixOS: モジュールシステム</h1>
+<ul class="incremental">
+<li>宣言型設定</li>
+<li>自動化</li>
+<li>拡張したNix言語を利用
+<ul class="incremental">
+<li>OS設定固有ドメイン言語</li>
+<li><a href="https://nixos.org/nixos/options.html">オプション型</a></li>
+</ul></li>
+<li>良く出来た<a href="http://nixos.org/nixos/manual/">マニュアル</a></li>
+<li>独自モジュールで拡張可能</li>
+<li>/etc/nixos/configuration.nix がメインのファイルになります</li>
+<li>モジュールシステムはnixpkgsに含まれています</li>
+</ul>
+</div>
+<div id="nixos-モジュールシステム例" class="slide section level1">
+<h1>NixOS: モジュールシステム例</h1>
+<ul class="incremental">
+<li><p>プロビジョニング</p>
+<pre><code>environment.systemPackages = with pkgs; [
+  firefox
+  termite
+  tmux
+];</code></pre></li>
+<li><p>systemdのサービス</p>
+<pre><code>systemd.services.ircSession = {
+  wantedBy = [ &quot;multi-user.target&quot; ];
+  after = [ &quot;network.target&quot; ];
+  serviceConfig = {
+    Type = &quot;forking&quot;;
+    User = &quot;username&quot;;
+    ExecStart = &#39;&#39;${pkgs.tmux}/bin/tmux new-session -d -s irc -n irc ${pkgs.irssi}/bin/irssi&#39;&#39;;
+    ExecStop  = &#39;&#39;${pkgs.tmux}/bin/tmux kill-session -t irc&#39;&#39;;
+  };
+};</code></pre></li>
+<li><p>gnomeを利用</p>
+<pre><code>services.xserver.enable = true;
+services.xserver.displayManager.gdm.enable = true;
+services.xserver.desktopManager.gnome3.enable = true;</code></pre></li>
+<li><p>Apache HTTPDを有効</p>
+<pre><code>services.httpd = {
+  enable       = true;
+  enablePHP    = true;
+  adminAddr    = &quot;web1@example.org&quot;;
+  documentRoot = &quot;/srv/http&quot;;
+};</code></pre></li>
+<li><p>カーネルバージョンの変更</p>
+<pre><code>boot.kernelPackages = pkgs.linuxPackages_4_4;</code></pre></li>
+<li><p>ユーザ作成</p>
+<pre><code>users.extraUsers.eric = {
+  isNormalUser = true;
+  createHome = true;
+  extraGroups = [ &quot;wheel&quot; &quot;scanner&quot; &quot;vboxusers&quot; &quot;audio&quot; &quot;docker&quot; ];
+  uid = 1000;
+};</code></pre></li>
+<li><p>日本語入力を有効</p>
+<pre><code>i18n.inputMethod = {
+  enabled  = &quot;fcitx&quot;;
+  fcitx.engines = with pkgs.fcitx-engines; [ mozc anthy ];
+};</code></pre></li>
+<li><p>firefoxのflashプラグインを有効</p>
+<pre><code>nixpkgs.config = {
+  allowUnfree = true;
+  firefox.enableAdobeFlash = true;
+};</code></pre></li>
+<li><p>フォント設定まで!</p>
+<pre><code>fonts = {
+  fonts = with pkgs; [ 
+    ipafont
+    powerline-fonts
+    kochi-substitute
+  ];
+
+  fontconfig = { 
+    defaultFonts = {
+      monospace = [ 
+        &quot;DejaVu Sans Mono for Powerline&quot;
+        &quot;IPAGothic&quot;
+      ];
+      serif = [ 
+        &quot;DejaVu Serif&quot;
+        &quot;IPAPMincho&quot;
+      ];
+      sansSerif = [
+        &quot;DejaVu Sans&quot;
+        &quot;IPAPGothic&quot;
+      ];
+    };
+  };
+};</code></pre></li>
+<li><p>ループも利用できます</p>
+<pre><code>services.httpd.virtualHosts =
+  let
+    makeVirtualHost = { name, root }:
+      { hostName = name;
+        documentRoot = root;
+        adminAddr = &quot;alice@example.org&quot;;
+      };
+  in map makeVirtualHost
+    [ { name = &quot;example.org&quot;; root = &quot;/sites/example.org&quot;; }
+      { name = &quot;example.com&quot;; root = &quot;/sites/example.com&quot;; }
+      { name = &quot;example.gov&quot;; root = &quot;/sites/example.gov&quot;; }
+      { name = &quot;example.nl&quot;;  root = &quot;/sites/example.nl&quot;; }
+    ];</code></pre></li>
+<li><p>if分岐</p>
+<pre><code>environment.systemPackages =
+  if config.services.xserver.enable then
+    with pkgs; [ firefox thunderbird ]
+  else
+    [ ];</code></pre></li>
+</ul>
+</div>
+<div id="nixos-再構築" class="slide section level1">
+<h1>NixOS: 再構築</h1>
+<ul class="incremental">
+<li><p>nixos-rebuild コマンドで設定を適応する</p>
+<pre><code>$ nixos-rebuild switch</code></pre></li>
+<li><p>設定をビルドのみ(コンパイルチェック)</p>
+<pre><code>$ nixos-rebuild build</code></pre></li>
+<li><p>設定をビルドし、バーチャルマシン（QEMU）起動で動作確認</p>
+<pre><code>$ nixos-rebuild build-vm</code></pre></li>
+</ul>
+</div>
+<div id="nixos-再構築図" class="slide section level1">
+<h1>NixOS: 再構築図</h1>
+<div class="figure">
+<img src="nix-rebuild-1.png" alt="" />
+
+</div>
+</div>
+<div id="nixos-再構築図-1" class="slide section level1">
+<h1>NixOS: 再構築図</h1>
+<div class="figure">
+<img src="nix-rebuild-2.png" alt="" />
+
+</div>
+</div>
+<div id="nixos-再構築図-2" class="slide section level1">
+<h1>NixOS: 再構築図</h1>
+<div class="figure">
+<img src="nix-rebuild-3.png" alt="" />
+
+</div>
+</div>
+<div id="nixos-再構築図-3" class="slide section level1">
+<h1>NixOS: 再構築図</h1>
+<div class="figure">
+<img src="nix-rebuild-4.png" alt="" />
+
+</div>
+</div>
+<div id="nixos-再現性" class="slide section level1">
+<h1>NixOS: 再現性</h1>
+<ul class="incremental">
+<li>宣言的にOSを設定できます</li>
+<li>configuration.nixを別マシンにコピーし、適応すれば同じ環境を再現できます</li>
+<li><a href="https://github.com/cransom/surface-pro-3-nixos">Surface 3</a>用のNixOS設定ファイルもあります</li>
+</ul>
+</div>
+<div id="nixos-devops" class="slide section level1">
+<h1>NixOS: DevOps</h1>
+<ul class="incremental">
+<li>専用ツール</li>
+<li>NixOps: NixOS環境のデプロイツール
+<ul class="incremental">
+<li>nix言語で設定ファイル</li>
+<li>バーチャルマシン、EC2、GCE、Hetznerなどをサポートします</li>
+<li>詳細は3月のNixOS勉強会へ!</li>
+</ul></li>
+<li>Disnix: サービス向けシステムデプロイツール
+<ul class="incremental">
+<li>異質OSネットワーク対応</li>
+<li>ステートもサポート(Dysnomia)</li>
+</ul></li>
+</ul>
+</div>
+<div id="nixos-構造図" class="slide section level1">
+<h1>NixOS: 構造図</h1>
+<div class="figure">
+<img src="nix-rebuild-global.png" alt="" />
+
+</div>
+</div>
+<div id="東京nixosミートアップ" class="slide section level1">
+<h1>東京NixOSミートアップ</h1>
+<ul class="incremental">
+<li>2015年9月に始まった</li>
+<li>毎月に勉強会をやります</li>
+<li><a href="http://www.meetup.com/ja-JP/Tokyo-NixOS-Meetup/">Meetup</a>と<a href="http://toikyo-nixos.connpass.com/">Connpass</a>にグループあります</li>
+<li>前回はパッケージ作成</li>
+<li>次回は
+<ul class="incremental">
+<li>3月23日 19:00 - 21:00</li>
+<li>テーマは<a href="http://toikyo-nixos.connpass.com/event/27671/">NixとDevOps、NixOps</a></li>
+<li>場所は<a href="https://www.coworking.tokyo.jp/">茅場町Co-Edo</a></li>
+</ul></li>
+</ul>
+</div>
+<div id="活動" class="slide section level1">
+<h1>活動</h1>
+<ul class="incremental">
+<li>GitHubで<a href="https://github.com/Tokyo-NixOS/Tokyo-NixOS-Meetup-Wiki/wiki">日本語Wiki管理</a></li>
+<li>パッケージ追加、モジュール追加（日本語入力）</li>
+<li>マニュアル翻訳を近々に始める予定</li>
+</ul>
+</div>
+<div id="最後に" class="slide section level1">
+<h1>最後に</h1>
+<ul class="incremental">
+<li>ブースに
+<ul class="incremental">
+<li>NixOSを体験できるマシン</li>
+<li>インストールCD</li>
+<li>ステッカー</li>
+</ul></li>
+<li>があります、気軽に寄ってください!</li>
+<li>ご清聴ありがとうございました</li>
+<li>質問タイム</li>
+</ul>
+</div>
+</body>
+</html>
