@@ -19,3 +19,6 @@ div.slide a{
   text-decoration: underline;
 }
 div.slide li ul li{ font-style: normal; }
+p code, li code{ font-family:monospace; padding:0.1em 0.3em; border-radius:3px; }
+div.slide pre{ border-radius:3px; border:none; font-weight:normal; } 
+blockquote{ padding:.5em 1em; border-radius:.5em; }

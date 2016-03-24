@@ -73,7 +73,7 @@
 - パッケージレシピはNix言語で書かれています
 - Nix言語はパッケージ用のドメイン固有言語
 - NixはNix言語のコンパイラー
-- パッケージをNixストアにインストール
+- パッケージはNixストアにインストールされます
 - 導出コンパイル = パッケージのビルド + ストアへインストール
 
 
@@ -131,7 +131,7 @@
 - パッケージでインストールされるファイルは導出で決まります（再現性）
 - 導出のハッシュがわかれば、ストアフォルダーとインストールされるファイルを判別できます
 - ハッシュを利用し、バイナリパッケージを特定できます
-- 再現性を利用し、導出を評価せずバイナリパッケージをインストールできます
+- 再現性を利用し、導出を評価せずにバイナリパッケージをインストールできます
 
 
 # Nix: システムパッケージ以外の管理
@@ -250,7 +250,7 @@
 - 簡単に拡張
 - 77000コミット以上
 - 700コミッター以上
-- ![](nixpkgs-data-h.png)
+- ![](assets/nixpkgs-data-h.png)
 
 
 # Hydra: ビルドファーム
@@ -275,24 +275,24 @@
 
 # Nix: パッケージインストール図
 
-![](nix-install-1.png)
+![](assets/nix-install-1.png)
 
 # Nix: パッケージインストール図
 
-![](nix-install-2.png)
+![](assets/nix-install-2.png)
 
 # Nix: パッケージインストール図
 
-![](nix-install-3.png)
+![](assets/nix-install-3.png)
 
 # Nix: パッケージインストール図
 
-![](nix-install-4.png)
+![](assets/nix-install-4.png)
 
 
 # Nix構造図
 
-![](nix-struct-global.png)
+![](assets/nix-struct-global.png)
 
 
 # Nix → NixOS
@@ -323,7 +323,7 @@
 - コマンドでロールバック可能
 - ブート画面でロールバック可能
 
-    ![](nixos-grub.png)
+    ![](assets/nixos-grub.png)
 
 
 # NixOS: モジュールシステム
@@ -500,19 +500,19 @@
 
 # NixOS: 再構築図
 
-![](nix-rebuild-1.png)
+![](assets/nix-rebuild-1.png)
 
 # NixOS: 再構築図
 
-![](nix-rebuild-2.png)
+![](assets/nix-rebuild-2.png)
 
 # NixOS: 再構築図
 
-![](nix-rebuild-3.png)
+![](assets/nix-rebuild-3.png)
 
 # NixOS: 再構築図
 
-![](nix-rebuild-4.png)
+![](assets/nix-rebuild-4.png)
 
 
 # NixOS: 再現性
@@ -536,7 +536,13 @@
 
 # NixOS: 構造図
 
-![](nix-rebuild-global.png)
+![](assets/nix-rebuild-global.png)
+
+
+# NixOS → 日本コミュニティ
+
+- 一息
+- 質問？
 
 
 # 東京NixOSミートアップ

@@ -10,9 +10,9 @@ div.slide h1{
   border-bottom: 1px solid #444;
 }
 div.slide pre{ 
-  background-color: #333;
+  background-color: #444;
   color: #ddd;
-  border: 2px solid #ddd;
+  border: none;
 }
 div.slide a{ 
   color: #8cf; 
@@ -28,3 +28,5 @@ div.toolbar a:active,
 div.toolbar a:link{ 
   color: #8cf; 
 }
+p code, li code{ background:#444; }
+blockquote{ background:#444; border-left:.5em solid #777;  }

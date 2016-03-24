@@ -63,17 +63,15 @@
 
 # Packaging 101: packaging basics
 
-Foreword:
+- Foreword:
+    - Reading the [contributor guide](http://nixos.org/nixpkgs/manual/) is always a good idea
+    - Basic understanding of the Nix language can help a lot, [a tour of nix](https://nixcloud.io/tour/?id=1) and the [manual](http://nixos.org/nix/manual/#chap-writing-nix-expressions) are great resources
 
-- Reading the [contributor guide](http://nixos.org/nixpkgs/manual/) is always a good idea
-- Basic understanding of the Nix language can help a lot, [a tour of nix](https://nixcloud.io/tour/?id=1) and the [manual](http://nixos.org/nix/manual/#chap-writing-nix-expressions) are great resources
-
-Basic workflow:
-
-- get [nixpkgs](https://github.com/NixOS/nixpkgs)
-- create a package file in the somewhere in `pkgs/`
-- add the package entry in `pkgs/top-level/all-packages.nix`
-- build the package and test
+- Basic workflow:
+    - get [nixpkgs](https://github.com/NixOS/nixpkgs)
+    - create a package file in the somewhere in `pkgs/`
+    - add the package entry in `pkgs/top-level/all-packages.nix`
+    - build the package and test
 
 
 # Packaging 101: getting nixpkgs
@@ -88,10 +86,10 @@ Basic workflow:
 
 - Or just clone the official nixpkgs if you have no github account or don't plan to submit PRs.
 
-## Exercices
+- **Exercices**:
 
-- check the structure under the `pkgs/`.
-- check `pkgs/top-level/all-packages.nix`.
+    - check the structure under the `pkgs/`.
+    - check `pkgs/top-level/all-packages.nix`.
 
 
 # Packaging 101: create a custom hello package (derivation)
@@ -117,21 +115,21 @@ Basic workflow:
 
 - edit `pkgs/applications/misc/my-hello/default.nix` and change the derivation name to my-hello
 
-## Exercices
+- **Exercices**:
 
-- Find what meta maintainers and licence fields refer to.
-- Make yourself as the maintainer of `my-hello`.
+    - Find what meta maintainers and licence fields refer to.
+    - Make yourself as the maintainer of `my-hello`.
 
 
 # Packaging 101: register the package to all-packages.nix
 
 - add a my-hello entry to `all-packages.nix`
 
-## Exercice
+- **Exercices**
 
-- figure the relation between the package name, the package path and the `all-packages.nix` entry name.
-- move the version in a dedicated attribute. 
-    - (tip: check the tilda package)
+    - figure the relation between the package name, the package path and the `all-packages.nix` entry name.
+    - move the version in a dedicated attribute. 
+        - (tip: check the tilda package)
 
 
 # Packaging 101: build the package 
@@ -148,19 +146,19 @@ Basic workflow:
     $ ./result/bin/hello
     ~~~~
 
-## Exercice
+- **Exercices**:
 
-- Check and note the my-hello nix store hash. 
-    - (tip: result is a symlink to the store)
-- Change my-hello version to 2.9
-    - (tip: `man nix-prefetch-url`).
-- Compare the first my-hello and 2.9 my-hello store hash.
-- Can you still run my-hello 2.10?
+    - Check and note the my-hello nix store hash. 
+        - (tip: result is a symlink to the store)
+    - Change my-hello version to 2.9
+        - (tip: `man nix-prefetch-url`).
+    - Compare the first my-hello and 2.9 my-hello store hash.
+    - Can you still run my-hello 2.10?
 
 
 # Packaging 101: Bonus Exercice
 
-Find a package not yet available in nixpkgs and package it.
+- Find a package not yet available in nixpkgs and package it.
 
 
 # Meetup future
