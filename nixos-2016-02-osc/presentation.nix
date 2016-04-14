@@ -6,7 +6,7 @@
   source = ./.;
 
   year  = "2016";
-  month = "2-osc";
+  month = "02-osc";
 
   assets = [ "assets" ];
 }

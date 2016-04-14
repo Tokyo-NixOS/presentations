@@ -5,8 +5,8 @@
   incremental = incremental;
   source = ./.;
 
-  month = "3";
   year  = "2016";
+  month = "03";
 
   assets = [ "examples" ];
 }
