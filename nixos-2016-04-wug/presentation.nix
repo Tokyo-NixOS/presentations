@@ -5,6 +5,8 @@
 
   source = ./.;
 
-  year  = "2015";
-  month = "09";
+  month = "04-wug";
+  year  = "2016";
+
+  assets = [ "assets" "examples" ];
 }

@@ -7,6 +7,7 @@
 
 ### 2016年
 
+- 4月(Wakame User Group): [Nixエコシステムの紹介](nixos-2016-04-wug/source.markdown)
 - 4月: [Nix言語](nixos-2016-04/source.markdown) ([英語](nixos-2016-04/source.en.markdown))
 - 3月: [NixOps & Nix DevOps](nixos-2016-03/source.markdown)
 - 2月(オープンソースカンファレンス): [関数型Linux: NixOSの仕組みと特徴の紹介](nixos-2016-02-osc/source.markdown)

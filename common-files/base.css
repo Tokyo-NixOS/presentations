@@ -3,10 +3,10 @@ div.slide{
   background-size: 3em;
   background-repeat: no-repeat;
   background-position: 99% .2em;
-  font-size:1.3em;
+  font-size:1.2em;
 }
 div.slide h1{ 
-  font-size: 1.4em;
+  font-size: 1.35em;
   margin: 0 0 2em 0;
   text-align:center;
   padding :.5em;
@@ -20,7 +20,7 @@ div.slide a{
   text-decoration: underline;
 }
 div.slide li ul li{ font-style: normal; font-size: 1em; }
-code{ font-family:monospace; border-radius:3px; padding:0.1em 0.3em; }
+code{ font-family:monospace; border-radius:.2em; padding:0.1em 0.3em; }
 pre code{ padding:0; }
 div.slide pre{ border-radius:3px; border:none; font-weight:normal; line-height: 1.4em; }
 blockquote{ padding:.5em 1em; border-radius:.5em; }

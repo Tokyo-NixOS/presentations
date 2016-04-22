@@ -17,7 +17,7 @@ pkgs.stdenv.mkDerivation rec {
 
   src = source;
 
-  buildInputs = with pkgs; [ pandoc qutebrowser ] ++ extraBuildInputs;
+  buildInputs = with pkgs; [ pandoc ] ++ extraBuildInputs;
 
   phases = [ "unpackPhase" "buildPhase" "installPhase" ];
 

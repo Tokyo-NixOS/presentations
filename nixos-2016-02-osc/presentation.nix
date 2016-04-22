@@ -1,8 +1,8 @@
 { pkgs ? import <nixpkgs> {}, style ? "light", incremental ? true }:
 
 (pkgs.callPackage ../mkPresentation.nix) {
-  style = style;
-  incremental = incremental;
+  inherit style incremental;
+
   source = ./.;
 
   year  = "2016";
