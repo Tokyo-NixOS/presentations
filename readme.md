@@ -7,6 +7,7 @@
 
 ### 2016年
 
+- 5月: [ハンズオン](nixos-2016-05/source.markdown)
 - 4月(Wakame User Group): [Nixエコシステムの紹介](nixos-2016-04-wug/source.markdown)
 - 4月: [Nix言語](nixos-2016-04/source.markdown) ([英語](nixos-2016-04/source.en.markdown))
 - 3月: [NixOps & Nix DevOps](nixos-2016-03/source.markdown)
@@ -29,7 +30,7 @@ $ nix-build nixos-YYYY-MM/presentation.nix
 フラグも渡せます:
 
 ```
-$ nix-build nixos-YYYY-MM/presentation.nix --arg style \"dark\" --arg incremental false
+$ nix-build nixos-YYYY-MM/presentation.nix --argstr style dark --arg incremental false
 ```
 
 結果は`result`フォルダーに作成され、コマンドで資料を`qutebrowser`で開始できます
