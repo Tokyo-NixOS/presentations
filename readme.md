@@ -7,6 +7,7 @@
 
 ### 2016年
 
+- 6月: [nixpkgs](nixos-2016-06/source.markdown)
 - 5月: [ハンズオン](nixos-2016-05/source.markdown)
 - 4月(Wakame User Group): [Nixエコシステムの紹介](nixos-2016-04-wug/source.markdown)
 - 4月: [Nix言語](nixos-2016-04/source.markdown) ([英語](nixos-2016-04/source.en.markdown))

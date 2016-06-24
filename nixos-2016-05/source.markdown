@@ -1,6 +1,6 @@
 % Nix Hands-on
 % サニエ エリック
-% 2016年5月日 - Tokyo NixOS Meetup
+% 2016年5月27日 - Tokyo NixOS Meetup
 
 # アジェンダ
 
