@@ -1,19 +1,25 @@
 html{
   background: #fff;
 }
+
 div.slide{ 
   color: #222; 
 }
+
 div.slide h1{ 
   color: #222;
   border-bottom: 1px solid #ddd;
 }
+
 div.slide pre{ 
   color: #222;
   background-color: #ddd;
 }
+
 div.slide a{ 
   color: #389; 
 }
+
 p code, li code{ background:#ddd; }
+
 blockquote{ background:#ddd; border-left:.5em solid #aaa;  }
