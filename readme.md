@@ -7,6 +7,7 @@
 
 ### 2016年
 
+- 8月(一周年記念イベント): [1 year anniversary](nixos-2016-08-1-year/source.markdown)
 - 8月: [Hydra](nixos-2016-08/source.markdown)
 - 7月: 休み
 - 6月: [nixpkgs](nixos-2016-06/source.markdown)
