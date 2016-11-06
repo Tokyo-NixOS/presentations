@@ -7,6 +7,9 @@
 
 ### 2016年
 
+- 11月（オープンソースカンファレンス）: [関数型デプロイメント: Nixエコシステムの紹介](nixos-2016-11-osc/source.markdown)
+- 10月: [NixOS 16.09 Release](nixos-2016-10-release/source.markdown)
+- 9月: [Extended Types for NixOS Modules](nixos-2016-09/source.markdown)
 - 8月(一周年記念イベント): [1 year anniversary](nixos-2016-08-1-year/source.markdown)
 - 8月: [Hydra](nixos-2016-08/source.markdown)
 - 7月: 休み
