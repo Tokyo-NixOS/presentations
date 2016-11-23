@@ -7,6 +7,7 @@
 
 ### 2016年
 
+- 11月: [NixOS Install](nixos-2016-11/source.markdown)
 - 11月（オープンソースカンファレンス）: [関数型デプロイメント: Nixエコシステムの紹介](nixos-2016-11-osc/source.markdown)
 - 10月: [NixOS 16.09 Release](nixos-2016-10-release/source.markdown)
 - 9月: [Extended Types for NixOS Modules](nixos-2016-09/source.markdown)
