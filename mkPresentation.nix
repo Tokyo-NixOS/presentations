@@ -29,6 +29,9 @@ pkgs.stdenv.mkDerivation rec {
   identifier = "${year}-${month}";
   name       = "NixOS-meetup-${identifier}";
 
+  preferLocalBuild = true;
+  allowSubstitutes = false;
+
   # passing the source
   src = source;
 

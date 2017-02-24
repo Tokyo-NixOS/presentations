@@ -7,6 +7,7 @@
 
 ### 2017年
 
+- 2月: [Managing projects with Nix](2017/02/source.markdown)
 - 1月: [Packaging](2017/01/source.markdown)
 
 
