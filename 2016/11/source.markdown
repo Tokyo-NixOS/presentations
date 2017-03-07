@@ -46,13 +46,13 @@
 
 - change keyboard layout
 
-    ```
+    ```sh
     # loadkeys jp106
     ```
 
 - prevent log messages (optional)
 
-    ```
+    ```sh
     # sysctl -w kernel.printk="3 4 1 3"
     ```
 
@@ -63,19 +63,19 @@
 
 - one single ext4 partition (5 ~ 20 GB)
 
-    ```
+    ```sh
     # fdisk /dev/sda
     ```
 
 - create the filesystem
 
-    ```
+    ```sh
     # mkfs.ext4 /dev/sda1
     ```
 
 - mount the partition
 
-    ```
+    ```sh
     # mount /dev/sda1 /mnt
     ```
 
@@ -83,13 +83,13 @@
 
 - Check the network
 
-    ```
+    ```sh
     # ping nixos.org -c3
     ```
 
 - setup wifi (Laptop setups)
 
-    ```
+    ```sh
     # systemctl stop wpa_supplicant
     # wpa_supplicant -i wlpXs0 -c <(wpa_passphrase 'my-essid' 'pa$$w0rd')
     ```
@@ -98,13 +98,13 @@
 
     - vim
 
-        ```
+        ```sh
         # nix-env -iA nixos.vim
         ```
 
     - emacs
 
-        ```
+        ```sh
         # nix-env -iA nixos.emacs
         ```
 
@@ -113,26 +113,26 @@
 
 - Generate the config
 
-    ```
+    ```sh
     # nixos-generate-config --root /mnt
     ```
 
 - Check the hardware config
 
-    ```
+    ```sh
     # less /mnt/etc/nixos/hardware-configuration.nix
     ```
 
 - Edit the main config
 
-    ```
+    ```sh
     # nano /mnt/etc/nixos/configuration.nix
     ```
 
 - Run the install
 
 
-    ```
+    ```sh
     # nixos-install
     ```
 
@@ -141,7 +141,7 @@
 - shutdown the machine
 
 
-    ```
+    ```sh
     # poweroff
     ```
 
@@ -153,7 +153,7 @@
 
 - Set `users.extraUsers` password (`Right Ctrl + F2` to switch to a console TTY, `Right Ctrl + F7` to switch back)
 
-    ```
+    ```sh
     # passwd USER
     ```
 

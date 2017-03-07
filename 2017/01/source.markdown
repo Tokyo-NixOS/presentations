@@ -44,14 +44,14 @@
 - To make packages, we need to know 2 constructs:
     - Functions, defined in the `head: body` pattern
 
-        ```
+        ```nix
         x: x
         x: x + 1
         ```
 
     - Sets, defined in the `{ key1 = value1; ... }` pattern:
 
-        ```
+        ```nix
         { x = 1; y = "foo"; }
         ```
 
@@ -59,13 +59,13 @@
 
 - Function head can accept sets:
 
-    ```
+    ```nix
     { name }: "Hello " + name
     ```
 
 - A standard nix package has this pattern:
 
-    ```
+    ```nix
     { stdenv, dep1, dep2, ... }:
     
     stdenv.mkDerivation {
@@ -143,7 +143,7 @@
 
 - Getting the examples source
 
-    ```
+    ```sh
     $ git clone https://github.com/Tokyo-NixOS/presentations
     ```
 
@@ -154,13 +154,13 @@
 
 - Normal building:
 
-    ```
+    ```sh
     $ nix-build 2017/01/examples/1-trivial.nix
     ```
 
 - Or decomposing the steps:
 
-    ```
+    ```sh
     $ nix-instantiate 2017/01/examples/1-trivial.nix
     $ nix-store -r /PATH/TO/DERIVATION
     ```

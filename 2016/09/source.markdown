@@ -83,7 +83,7 @@
 - `foo`, `bar` and `baz` are managed in different module files
 - `foo` backend type declaration:
 
-    ```
+    ```nix
     services.foo.backend = mkOption {
       description = "used backend";
       type = types.enum [ "bar" "baz" ];
@@ -92,7 +92,7 @@
 
 - And in the `bar` backend module:
 
-    ```
+    ```nix
     config = mkIf (config.services.foo.backend == "bar") {
       ...
     };
@@ -108,7 +108,7 @@
 - EOT permits to define a "placeholder" `enum` option:
 - `foo` backend type declaration:
 
-    ```
+    ```nix
     services.foo.backend = mkOption {
       description = "used backend";
       type = types.enum [ ];
@@ -118,7 +118,7 @@
 - and to "extend" it in other module files
 - `bar` backend type extension:
 
-    ```
+    ```nix
     services.foo.backend = mkOption {
       type = types.enum [ "bar" ];
     };
@@ -126,7 +126,7 @@
 
 - `baz` backend type extension:
 
-    ```
+    ```nix
     services.foo.backend = mkOption {
       type = types.enum [ "baz" ];
     };

@@ -28,7 +28,7 @@
 - [Nix on Jolla](http://thread.gmane.org/gmane.linux.distributions.nixos/20711)
 - [Using string as path to eg. builtins.readFile](http://thread.gmane.org/gmane.linux.distributions.nixos/20729)
 
-    ```
+    ```nix
     nix-repl> ./ + "/foo"
     error: syntax error, unexpected '.', at (string):1:1
 
@@ -41,7 +41,7 @@
 
 - Hydraでのパッケージ評価を確認
 
-    ```
+    ```nix
     nix-repl> :l ./nixos/release-combined.nix
     Added 3 variables.
 
@@ -70,13 +70,13 @@
 
 - `git`でクローンできます
 
-    ```
+    ```sh
     $ git clone https://github.com/NixOS/nixpkgs.git
     ```
 
 - チャンネルのリモートを追加するとテストの際にバイナリパッケージを利用できます
 
-    ```
+    ```sh
     $ cd nixpkgs
     $ git remote add channels https://github.com/NixOS/nixpkgs-channels.git
     $ git fetch channels
@@ -87,19 +87,19 @@
 
 - ローカルnixpkgsからパッケージを検索する
 
-    ```
+    ```sh
     $ nix-env -qaf ./ firefox
     ```
 
 - ロカールnixpkgsからシェルを起動する
 
-    ```
+    ```sh
     $ nix-shell -p htop -I nixpkgs=./
     ```
 
 - ローカルnixpkgsからパッケージをビルド
 
-    ```
+    ```sh
     $ nix-build -A htop
     ```
 
@@ -120,7 +120,7 @@
 - `default.nix`でマニュアルビルドエクスプレッション
 - ビルドできます
 
-    ```
+    ```sh
     $ nix-build doc/default.nix
     ```
 
@@ -222,7 +222,7 @@
 - 正常に終わると結果にHTMLレポートができます
 - 手動で実行可能
 
-    ```
+    ```sh
     $ nix-build nixos/release.nix -A tests.i3wm
     ```
 
@@ -232,31 +232,31 @@
 - NixOSのHydraジョブ
 - マニュアル
 
-    ```
+    ```sh
     $ nix-build nixos/release.nix -A manual
     ```
 
-    ```
+    ```sh
     $ nix-build nixos/release.nix -A manualPDF
     ```
 
 - バーチャルマシンイメージ
 
 
-    ```
+    ```sh
     $ nix-build nixos/release.nix -A ova
     ```
 
 - NixOSのインストールCDイメージ
 
-    ```
+    ```sh
     $ nix-build nixos/release.nix -A iso_minimal
     ```
 
 - テスト
 
 
-    ```
+    ```sh
     $ nix-build nixos/release.nix -A tests.i3wm
     ```
 

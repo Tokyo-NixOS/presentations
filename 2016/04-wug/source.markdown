@@ -72,7 +72,7 @@
 - Derivationの結果はNixストアにインストールされます (`/nix/store/HASH-NAME-VERSION`)
 - ストアフォルダー内にパッケージが完全隔離されています
 
-    ~~~
+    ~~~sh
     $ tree /nix/store/3j8jkah29zrksh5zz7dm9vbg2f3h37fx-tree-1.7.0/
     /nix/store/3j8jkah29zrksh5zz7dm9vbg2f3h37fx-tree-1.7.0/
     ├── bin
@@ -90,7 +90,7 @@
 - ストア内ファイルは不変（読み込みファイルシステムでマウント）
 - ストア内の依存関係を確認できる
 
-    ~~~
+    ~~~sh
     $ nix-store -qR $(readlink $(which tmux))
     /nix/store/gygp4inn8w53wy161yy08ilf4kvzw0ki-linux-headers-3.18.14
     /nix/store/pv9sza1cf2kpawck7wbwdnhlip5h57lg-glibc-2.23
@@ -114,14 +114,14 @@
 
     - Haskell
 
-        ~~~
+        ~~~sh
         $ nix-env -f "<nixpkgs>" -qaP -A haskellPackages | wc -l
         12524
         ~~~
     
     - Python
     
-        ~~~
+        ~~~sh
         $ nix-env -f "<nixpkgs>" -qaP -A python2Packages | wc -l
         1250
     
@@ -137,13 +137,13 @@
 
 - マニュアルの生成
 
-    ~~~
+    ~~~sh
     $ nix-build '<nixpkgs/nixos/release.nix>' -A manualPDF
     ~~~
 
 - ISOイメージの生成
 
-    ~~~
+    ~~~sh
     $ nix-build '<nixpkgs/nixos/release.nix>' -A iso_minimal.x86_64-linux
     ~~~
 
@@ -154,7 +154,7 @@
     - 自動バージョニング
 - ロールバック可能
 
-    ~~~
+    ~~~sh
     $ nix-env --list-generations
      28   2016-01-31 07:23:34
      29   2016-01-31 18:03:26   
@@ -178,13 +178,13 @@
 
 - Derivationの引数
 
-    ~~~
+    ~~~nix
     libreNginx = nginx.override { openssl = libressl; }
     ~~~
 
 - Derivationの属性
 
-    ~~~
+    ~~~nix
     myNginx = nginx.overrideDerivation  (super:
       name = "nginx-git";
       src = fetchFromGitHub {
@@ -273,7 +273,7 @@
 
 - プロビジョニング
 
-    ~~~
+    ~~~nix
     environment.systemPackages = with pkgs; [
       git
       mutt
@@ -283,7 +283,7 @@
 
 - sytemdサービス
 
-    ~~~
+    ~~~nix
     systemd.services.ircSession = {
       wantedBy = [ "multi-user.target" ];
       after    = [ "network.target" ];
@@ -301,7 +301,7 @@
 
 - デスクトップ環境
 
-    ~~~
+    ~~~nix
     services.xserver.enable = true;
     services.xserver.displayManager.gdm.enable = true;
     services.xserver.desktopManager.gnome3.enable = true;
@@ -309,13 +309,13 @@
 
 - カーネルバージョンの指定
 
-    ~~~
+    ~~~nix
     boot.kernelPackages = pkgs.linuxPackages_4_4;
     ~~~
 
 - ユーザ作成
 
-    ~~~
+    ~~~nix
     users.extraUsers.foo = {
       isNormalUser = true;
       extraGroups  = [ "wheel" ];
@@ -327,7 +327,7 @@
 
 - httpdを有効
 
-    ~~~
+    ~~~nix
     services.httpd = {
       enable       = true;
       enablePHP    = true;
@@ -338,7 +338,7 @@
 
 - Nix言語も活かせる
 
-    ~~~
+    ~~~nix
     services.httpd.virtualHosts =
       let
         makeVirtualHost = { name, root }:
@@ -357,7 +357,7 @@
 
 - `if`
 
-    ~~~
+    ~~~nix
     environment.systemPackages = with pkgs;
       if config.services.xserver.enable then
         [ firefox thunderbird ]
@@ -367,7 +367,7 @@
 
 - gitlabを有効
 
-    ~~~
+    ~~~nix
     services.gitlab = {
       enable = true;
       databasePassword = "eXaMpl3";
@@ -390,19 +390,19 @@
 
 - `nixos-rebuild`コマンドで設定を適応する
 
-    ~~~
+    ~~~sh
     $ nixos-rebuild switch
     ~~~
 
 - 設定をビルドし、バーチャルマシン（QEMU）で動作確認
 
-    ~~~
+    ~~~sh
     $ nixos-rebuild build-vm
     ~~~
 
 - パッケージセットと設定ファイルを指定できます
 
-    ~~~
+    ~~~sh
     $ nixos-rebuild build-vm -I nixpkgs=~/my-project/nixpkgs/ -I nixos-config=~/my-project/configuration.nix
     ~~~
 
@@ -516,7 +516,7 @@
 
 - サンプル
 
-    ~~~
+    ~~~nix
     containers.httpd = {
   
       privateNetwork = true;
@@ -546,17 +546,17 @@
 - クロージャー: パッケージとランタイム依存のセット
 - `nix-store`コマンドでクロージャーを確認
     
-    ~~~
+    ~~~sh
     $ nix-store -qR STORE-PATH
     ~~~
 
 - `nix-copy-closure`でクロージャーをssh経由で他マシンへコピーできる
 
-    ~~~
+    ~~~sh
     $ nix-copy-closure --to   USER@SERVER STORE-PATH
     ~~~
 
-    ~~~
+    ~~~sh
     $ nix-copy-closure --from USER@SERVER STORE-PATH
     ~~~
 
@@ -627,7 +627,7 @@
     examples/docker/
     ~~~
 
-    ~~~
+    ~~~sh
     $ nix-build docker.nix
     $ docker load < NIX-STORE-PATH
     $ docker run redis redis-cli --version

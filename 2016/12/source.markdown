@@ -64,7 +64,7 @@
 
 - Overriding packages dependencies:
 
-    ```
+    ```nix
     environment.systemPackages = with pkgs; [
       (nginx.override { openssl = libressl; })
     ];
@@ -72,7 +72,7 @@
 
 - Using custom packages:
 
-    ```
+    ```nix
     environment.systemPackages = with pkgs; [
       (import ./my-pkg.nix)
       (pkgs.callPackage ./my-other-pkg.nix)
@@ -100,7 +100,7 @@
 - Every store item is compartimented in its own folder
 - Example:
     
-    ```
+    ```sh
     $ nix-build -A hello '<nixpkgs>'
     $ ls result -dl
     $ tree result
@@ -137,7 +137,7 @@
     - `nix-channel --update` to update the channels
 - Example: using the unstable channel:
 
-    ```
+    ```sh
     $ nix-channel --add https://nixos.org/channels/nixos-unstable nixos
     $ nix-channel --update
     ```
@@ -152,13 +152,13 @@
 
 - A remote nixpkgs archive can be used:
 
-    ```
+    ```sh
     $ nixos-rebuild switch -I nixpkgs=https://github.com/nixos/nixpkgs-channels/archive/nixos-16.09.tar.gz
     ```
 
 - A local checkout of nixpkgs, useful for custom patches:
 
-    ```
+    ```sh
     $ nixos-rebuild switch -I nixpkgs=/path/to/my/nixpkgs
     ```
 
@@ -167,13 +167,13 @@
 
 - User channels version can be checked with:
 
-    ```
+    ```sh
     $ nix-env -p /nix/var/nix/profiles/per-user/USER/channels --list-generations
     ```
 
 - And their version changed with:
 
-    ```
+    ```sh
     $ nix-env -p /nix/var/nix/profiles/per-user/USER/channels --switch-generations GEN
     ```
 
@@ -192,14 +192,14 @@
 
 - `nix-shell` command to generate temporary environments:
 
-    ```
+    ```sh
     $ nix-shell -p hello
     $ hello
     ```
 
 - can even run commands:
 
-    ```
+    ```sh
     $ nix-shell -p cowsay --run "cowsay hello nix"
     ```
 
@@ -211,7 +211,7 @@
 
 - nix-env is complex, [nox](https://github.com/madjar/nox) is more user-friendly:
 
-    ```
+    ```sh
     $ nix-shell -p nox
     $ nox browser
     ```
@@ -223,7 +223,7 @@
 - Removing packages with `nix-env -e` or by removing them from `environment.systemPackages` dont remove them from the store
 - Store can be cleaned by garbage-collecting it:
 
-    ```
+    ```sh
     # nix-collect-garbage --delete-older-than 14d
     ```
 

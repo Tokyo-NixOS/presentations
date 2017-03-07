@@ -7,7 +7,7 @@
 
 - Get a copy of the presentation repo to play with the code:
 
-    ```
+    ```sh
     $ git clone https://github.com/Tokyo-NixOS/presentations.git
     ```
 
@@ -46,7 +46,7 @@
 - Nix shell is a tool to enter in a nix build environment
 - Can be used to create ad-hoc environments with custom packages
 
-    ```
+    ```sh
     $ nix-shell -p elixir
     ```
 

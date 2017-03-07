@@ -343,7 +343,7 @@
 
 - プロビジョニング
 
-    ~~~
+    ~~~nix
     environment.systemPackages = with pkgs; [
       firefox
       termite
@@ -353,7 +353,7 @@
 
 - systemdのサービス
 
-    ~~~
+    ~~~nix
     systemd.services.ircSession = {
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
@@ -368,7 +368,7 @@
 
 - gnomeを利用
 
-    ~~~
+    ~~~nix
     services.xserver.enable = true;
     services.xserver.displayManager.gdm.enable = true;
     services.xserver.desktopManager.gnome3.enable = true;
@@ -376,7 +376,7 @@
 
 - Apache HTTPDを有効
 
-    ~~~
+    ~~~nix
     services.httpd = {
       enable       = true;
       enablePHP    = true;
@@ -387,13 +387,13 @@
 
 - カーネルバージョンの変更
 
-    ~~~
+    ~~~nix
     boot.kernelPackages = pkgs.linuxPackages_4_4;
     ~~~
 
 - ユーザ作成
 
-    ~~~
+    ~~~nix
     users.extraUsers.eric = {
       isNormalUser = true;
       createHome = true;
@@ -404,7 +404,7 @@
 
 - 日本語入力を有効
 
-    ~~~
+    ~~~nix
     i18n.inputMethod = {
       enabled  = "fcitx";
       fcitx.engines = with pkgs.fcitx-engines; [ mozc anthy ];
@@ -413,7 +413,7 @@
 
 - firefoxのflashプラグインを有効
 
-    ~~~
+    ~~~nix
     nixpkgs.config = {
       allowUnfree = true;
       firefox.enableAdobeFlash = true;
@@ -422,7 +422,7 @@
 
 - フォント設定まで!
 
-    ~~~
+    ~~~nix
     fonts = {
       fonts = with pkgs; [ 
         ipafont
@@ -451,7 +451,7 @@
 
 - ループも利用できます
 
-    ~~~
+    ~~~nix
     services.httpd.virtualHosts =
       let
         makeVirtualHost = { name, root }:
@@ -469,7 +469,7 @@
 
 - if分岐
 
-    ~~~
+    ~~~nix
     environment.systemPackages =
       if config.services.xserver.enable then
         with pkgs; [ firefox thunderbird ]
@@ -481,19 +481,19 @@
 
 - nixos-rebuild コマンドで設定を適応する
 
-    ~~~
+    ~~~sh
     $ nixos-rebuild switch
     ~~~
 
 - 設定をビルドのみ(コンパイルチェック)
 
-    ~~~
+    ~~~sh
     $ nixos-rebuild build
     ~~~
 
 - 設定をビルドし、バーチャルマシン（QEMU）起動で動作確認
 
-    ~~~
+    ~~~sh
     $ nixos-rebuild build-vm
     ~~~
 

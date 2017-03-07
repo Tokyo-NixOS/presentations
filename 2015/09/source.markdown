@@ -41,7 +41,7 @@ Edit at own risk.
 * Nix expression language is very rich, and configurations can be turned in programs for more modularity
 * Running the `nixos-rebuild` command update the system based on `configuration.nix, example:`
 
-    ~~~~
+    ~~~~sh
     $ nixos-rebuild switch
     ~~~~
 
@@ -52,13 +52,13 @@ Edit at own risk.
     * [Available options search engine](https://nixos.org/nixos/options.html)
     * `nixos-option` command:
 
-        ~~~~
+        ~~~~sh
         $ nixos-option services.xserver.enable
         ~~~~
 
 * `nix-repl` command:
 
-    ~~~~
+    ~~~~sh
     $ nix-repl '<nixos>'
     config.services.xserver
     ~~~~
@@ -67,7 +67,7 @@ Edit at own risk.
 
 * Import separate files:
 
-    ~~~~
+    ~~~~nix
       imports = [ 
         ./hardware-configuration.nix
         ./software.nix
@@ -80,13 +80,13 @@ Edit at own risk.
 
 * Global packages installation:
 
-    ~~~~
+    ~~~~nix
     environment.systemPackages = [ pkgs.emacs pkgs.vim ];
     ~~~~
 
     or
 
-    ~~~~
+    ~~~~nix
     environment.systemPackages = with pkgs; [ emacs vim ];
     ~~~~
 
@@ -95,7 +95,7 @@ Edit at own risk.
 
 * Enabling japanese input:
 
-    ~~~~
+    ~~~~nix
       programs = {
         ibus.enable  = true;
         ibus.plugins = [ pkgs.ibus-anthy pkgs.mozc ];
@@ -104,7 +104,7 @@ Edit at own risk.
     
     or 
     
-    ~~~~
+    ~~~~nix
       programs = {
         ibus = {
           enable  = true;
@@ -118,7 +118,7 @@ Edit at own risk.
 
 * Enabling Apache web server:
 
-    ~~~~
+    ~~~~nix
       services = {
         httpd = {
           enable = true;
@@ -132,7 +132,7 @@ Edit at own risk.
 
 * Using functions:
 
-    ~~~~
+    ~~~~nix
       services.httpd.virtualHosts =
         let
           makeVirtualHost = { name, root }:
@@ -152,7 +152,7 @@ Edit at own risk.
 
 * Using Conditionals:
     
-    ~~~~
+    ~~~~nix
       environment.systemPackages =
         if config.services.xserver.enable then
           [ pkgs.firefox
@@ -176,7 +176,7 @@ Edit at own risk.
 
 * [simple derivation](https://github.com/NixOS/nixpkgs/blob/master/pkgs/applications/misc/hello/ex-2/default.nix):
 
-    ~~~~
+    ~~~~nix
     { stdenv, fetchurl }:
     
     stdenv.mkDerivation rec {
@@ -220,7 +220,7 @@ Edit at own risk.
 * the HASH part is the only important for the system
 * the hash is computed using all the inputs of the derivation
 
-    ~~~~
+    ~~~~sh
     ls -d /nix/store/*/ | grep firefox
     /nix/store/3qv1pxgfb8afgzv1mn8ik7k6wibm9ixr-firefox-with-plugins-40.0.2/
     /nix/store/48j5d2432lfl7b6qky20zvqnx4limmln-firefox-40.0.3/
@@ -243,7 +243,7 @@ Edit at own risk.
 
 * A store folder contains *all* the files of the package
     
-    ~~~~
+    ~~~~sh
     tree /nix/store/nmg89z2dxrx87wdqfhfbgbm3jzvczwq0-tree-1.7.0/
     /nix/store/nmg89z2dxrx87wdqfhfbgbm3jzvczwq0-tree-1.7.0/
     ├── bin
@@ -294,7 +294,7 @@ Edit at own risk.
 * `nix-shell` has a `-p` argument that take a list of packages to bring in the shell
 * this is allow quick testing of packages
     
-    ~~~~
+    ~~~~sh
     # java -version
     The program ‘java’ is currently not installed. It is provided by
     several packages. You can install it by typing one of the following:

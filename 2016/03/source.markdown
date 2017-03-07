@@ -88,24 +88,24 @@
 - 特定な環境を起動するツール
 - `nix-shell`を試す
 
-    ~~~
+    ~~~sh
     $ nix-shell -p redis --run "redis-server"
     ~~~
 
-    ~~~
+    ~~~sh
     $ nix-shell -p redis --run "redis-cli"
     ~~~
 
 - nixファイルで定義した環境を読み込める
 - デモ: python開発用nix-shell 
 
-    ~~~
+    ~~~sh
     examples/nix-shell/python.nix
     ~~~
 
 - デモ: haskell開発用nix-shell
 
-    ~~~
+    ~~~sh
     examples/nix-shell/haskell.nix
     ~~~
 
@@ -131,7 +131,7 @@
 
 - サンプル
 
-    ~~~
+    ~~~nix
     containers.httpd = {
   
       privateNetwork = true;
@@ -158,11 +158,11 @@
 - `container@CONTAINER-NAME.service`ユニットで管理される
 - コンテナーにログインできます
 
-    ~~~
+    ~~~sh
     $ nixos-container login CONTAINER-NAME
     ~~~
 
-    ~~~
+    ~~~sh
     $ nixos-container root-login CONTAINER-NAME
     ~~~
 
@@ -180,33 +180,33 @@
 - パッケージとランタイム依存のセット
 - ストアパースに対して、クロージャーを`nix-store`コマンドで確認できます
     
-    ~~~
+    ~~~sh
     $ nix-store -qR STORE-PATH
     ~~~
 
 - `--graph`パラメーターでクロージャーのdotファイルを生成できます
 
-    ~~~
+    ~~~sh
     $ nix-store -q --graph STORE-PATH > CLOSURE.dot
     ~~~
 
-    ~~~
+    ~~~sh
     $ nix-shell -p python27Packages.xdot --run "xdot CLOSURE.dot"
     ~~~
 
 - `nix-copy-closure`でクロージャーを他マシンに移動できます
 
-    ~~~
+    ~~~sh
     $ nix-copy-closure --to USER@SERVER STORE-PATH
     ~~~
 
-    ~~~
+    ~~~sh
     $ nix-copy-closure --from USER@SERVER STORE-PATH
     ~~~
 
 - `nix-env -i`でパッケージをインストールできます
 
-    ~~~
+    ~~~sh
     $ nix-env -i STORE-PATH
     ~~~
 
@@ -232,19 +232,19 @@
 
 - デプロイメントを作成
 
-    ~~~
+    ~~~sh
     $ nixops create LOGICAL.nix PHYSICAL.nix -d DEPLOYMENT
     ~~~
 
 - デプロイメントをリストアップ
 
-    ~~~
+    ~~~sh
     $ nixops list
     ~~~
 
 - デプロイメントの情報確認
 
-    ~~~
+    ~~~sh
     $ nixops info -d DEPLOYMENT
     ~~~
 
@@ -312,37 +312,37 @@
 
 - `-I nixpkgs=`パラメーターで各コマンドに特定なチャンネルを利用できる
 
-    ~~~
+    ~~~sh
     $ nixops deploy -d DEPLOYMENT -I nixpkgs=https://github.com/NixOS/nixpkgs-channels/archive/nixos-15.09-small.tar.gz
     ~~~
 
-    ~~~
+    ~~~sh
     $ nixops deploy -d DEPLOYMENT -I nixpkgs=https://github.com/NixOS/nixpkgs-channels/archive/nixos-unstable-small.tar.gz
     ~~~
 
-    ~~~
+    ~~~sh
     $ nixops deploy -d DEPLOYMENT -I nixpkgs=/home/foo/nixpkgs/
     ~~~
 
 - json形式でデプロイメントのインポート・エクスポートできます
 
-    ~~~
+    ~~~sh
     $ nixops export -d DEPLOYMENT > FILE.json
     ~~~
 
-    ~~~
+    ~~~sh
     $ nixops import -s DEPLOYMENT < FILE.json
     ~~~
 
 - パラメーターを設定する事ができます
 
-    ~~~
+    ~~~sh
     $ nixops set-args --arg active true
     ~~~
 
 - デプロイメントは変更できます
 
-    ~~~
+    ~~~sh
     $ nixops modify -d DEPLOYMENT -n NEWNAME LOGICAL.nix PHYSICAL.nix
     ~~~
 
@@ -372,7 +372,7 @@
     examples/docker/
     ~~~
 
-    ~~~
+    ~~~sh
     $ docker load < NIX-STORE
     $ docker run IMAGE COMMAND 
     ~~~

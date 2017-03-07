@@ -80,7 +80,7 @@
 - go to the forked repository and get the clone url
 - clone to a local machine
 
-    ~~~~
+    ~~~~sh
     $ git clone git@github.com:USER/nixpkgs.git
     ~~~~
 
@@ -97,19 +97,19 @@
 - check the default hello package in `pkgs/applications/misc/hello/default.nix`
 - create a dedicated branch
 
-    ~~~~
+    ~~~~sh
     $ git checkout -b pkg/my-hello
     ~~~~
 
 - create `my-hello` folder in misc
 
-    ~~~~
+    ~~~~sh
     $ mkdir pkgs/applications/misc/my-hello/
     ~~~~
 
 - copy the hello derivation to my-hello
 
-    ~~~~
+    ~~~~sh
     $ cp pkgs/applications/misc/{,my-}hello/default.nix
     ~~~~
 
@@ -136,13 +136,13 @@
 
 - build the package
 
-    ~~~~
+    ~~~~sh
     $ nix-build -A my-hello
     ~~~~
 
 - run it!
 
-    ~~~~
+    ~~~~sh
     $ ./result/bin/hello
     ~~~~
 

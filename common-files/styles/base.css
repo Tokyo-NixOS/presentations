@@ -8,7 +8,7 @@ div.slide{
 
 div.slide h1{ 
   font-size: 1.35em;
-  margin: 0 0 2em 0;
+  margin: 0 0 .9em 0;
   text-align:center;
   padding :.5em;
 }
@@ -16,7 +16,11 @@ div.slide h1{
 div.slide li p{ margin:0; }
 
 div.slide pre{ 
-  padding: 0.6em;
+  padding: 0;
+}
+
+div.slide pre code{ 
+  padding: .4em;
 }
 
 div.slide a{ 

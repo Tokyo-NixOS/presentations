@@ -134,7 +134,7 @@
     - NixOS 16.09に正式入る予定です
 - 基本設定(`configuration.nix`):
 
-    ```
+    ```nix
     services.hydra = {
       enable = true;
       hydraURL = "hydra.example.org";

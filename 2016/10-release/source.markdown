@@ -65,7 +65,7 @@
 
 - プロビジョニング
 
-    ~~~
+    ~~~nix
     environment.systemPackages = with pkgs; [
       git
       mutt
@@ -75,7 +75,7 @@
 
 - sytemdサービス
 
-    ~~~
+    ~~~nix
     systemd.services.ircSession = {
       wantedBy = [ "multi-user.target" ];
       after    = [ "network.target" ];
@@ -93,7 +93,7 @@
 
 - デスクトップ環境
 
-    ~~~
+    ~~~nix
     services.xserver.enable = true;
     services.xserver.displayManager.gdm.enable = true;
     services.xserver.desktopManager.gnome3.enable = true;
@@ -101,13 +101,13 @@
 
 - カーネルバージョンの指定
 
-    ~~~
+    ~~~nix
     boot.kernelPackages = pkgs.linuxPackages_4_4;
     ~~~
 
 - ユーザ作成
 
-    ~~~
+    ~~~nix
     users.extraUsers.foo = {
       isNormalUser = true;
       extraGroups  = [ "wheel" ];
@@ -119,7 +119,7 @@
 
 - httpdを有効
 
-    ~~~
+    ~~~nix
     services.httpd = {
       enable       = true;
       enablePHP    = true;
@@ -130,7 +130,7 @@
 
 - Nix言語も活かせる
 
-    ~~~
+    ~~~nix
     services.httpd.virtualHosts =
       let
         makeVirtualHost = { name, root }:
@@ -149,7 +149,7 @@
 
 - `if`
 
-    ~~~
+    ~~~nix
     environment.systemPackages = with pkgs;
       if config.services.xserver.enable then
         [ firefox thunderbird ]
@@ -159,7 +159,7 @@
 
 - gitlabを有効
 
-    ~~~
+    ~~~nix
     services.gitlab = {
       enable = true;
       databasePassword = "eXaMpl3";
@@ -182,19 +182,19 @@
 
 - `nixos-rebuild`コマンドで設定を適応する
 
-    ~~~
+    ~~~sh
     $ nixos-rebuild switch
     ~~~
 
 - 設定をビルドし、バーチャルマシン（QEMU）で動作確認
 
-    ~~~
+    ~~~sh
     $ nixos-rebuild build-vm
     ~~~
 
 - パッケージセットと設定ファイルを指定できます
 
-    ~~~
+    ~~~sh
     $ nixos-rebuild build-vm -I nixpkgs=~/my-project/nixpkgs/ -I nixos-config=~/my-project/configuration.nix
     ~~~
 

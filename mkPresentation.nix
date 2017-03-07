@@ -45,7 +45,11 @@ pkgs.stdenv.mkDerivation rec {
   buildPhase = ''
     for source in $(find . -name source\*.markdown); do
       id=$(sed 's/.*source\(.*\)\.markdown/\1/' <<<$source)
-	    pandoc -s ${incrementalFlag} -t slidy $source -o "index$id.html" --css ${commonFiles}/base.css --css ${commonFiles}/${style}.css
+	    pandoc -s ${incrementalFlag} -t slidy $source -o "index$id.html" \
+             --css ${commonFiles}/styles/base.css --css ${commonFiles}/styles/${style}.css \
+             --css https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/github.min.css \
+             -V slidy-url=${commonFiles} --no-highlight \
+             -A ${commonFiles}/highlight
       echo "${pkgs.qutebrowser}/bin/qutebrowser $out/share/${name}/index$id.html --target=window &" > "meetup$id"
     done
   '';

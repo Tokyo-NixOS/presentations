@@ -80,19 +80,19 @@
 - `nix-intantiate` コマンド
     - 使い方
 
-        ```
+        ```sh
         nix-instantiate  --eval -E '1 + 3'
         ```
 
     - デフォルトは延長評価
 
-        ```
+        ```sh
         nix-instantiate --eval -E 'rec { x = "foo"; y = x; }'
         ```
 
     - `--strict`で先行評価
 
-        ```
+        ```sh
         nix-instantiate --eval -E --strict 'rec { x = "foo"; y = x; }'
         ```
 
@@ -103,11 +103,11 @@
 
 - 書き方
 
-    ```
+    ```nix
     "foo bar"
     ```
 
-    ```
+    ```nix
     "
     foo
     bar
@@ -116,7 +116,7 @@
 
 - インデントを含む数行の文字列も書けます
 
-    ```
+    ```nix
     ''
       foo
       bar
@@ -125,13 +125,13 @@
 
 - `${}`で文字列に評価できるNix expressionの結果を文字列に入れる事はできます
 
-    ```
+    ```nix
     "--with-freetype2-library=${freetype}/lib"
     ```
 
 - [RFC2396](http://www.ietf.org/rfc/rfc2396.txt)に準拠したURIを`""`に囲まず書く事ができます ([関連討論](https://github.com/NixOS/nix/issues/836))
 
-    ```
+    ```nix
     http://example.org/foo.tar.bz2
     ```
 
@@ -158,7 +158,7 @@
 - 異なった型を含む事ができます
 - 例
 
-    ```
+    ```nix
     [ 123 ./foo.nix "abc" (f { x = y; }) ]
     ```
 
@@ -173,7 +173,7 @@
 - 一般なキーバリュー型
 - 例
 
-    ```
+    ```nix
     { 
       x = 123;
       text = "Hello";
@@ -183,7 +183,7 @@
 
 - `.`でキーの値をアクセスできます
 
-    ```
+    ```nix
     { a = "Foo"; b = "Bar"; }.a
 
     # => "Foo"
@@ -193,7 +193,7 @@
 
 - `rec`キーワードで再帰セット宣言
 
-    ```
+    ```nix
     rec {
       x = y;
       y = 123;
@@ -204,7 +204,7 @@
 
 - 無限再帰の危険はあります
 
-    ```
+    ```nix
     rec {
       x = y;
       y = x;
@@ -215,7 +215,7 @@
 
 - 利用例: パッケージの`name`と`version`
 
-    ```
+    ```nix
     rec {
       name = "foo-${version}";
       version = "1.0.0";
@@ -226,7 +226,7 @@
 
 - `let`でローカル変数を定義できます
 
-    ```
+    ```nix
     let
       x = "foo";
       y = "bar";
@@ -240,7 +240,7 @@
 
 - `inherit`で外部スコープの変数を利用する
 
-    ```
+    ```nix
     let x = 123; in
     { 
       inherit x;
@@ -252,7 +252,7 @@
 
 - `inherit a b`外部スコープ`a`セットの`b`属性を利用する
 
-    ```
+    ```nix
     graphviz = (import ../tools/graphics/graphviz) {
       inherit fetchurl stdenv libpng libjpeg expat x11 yacc;
       inherit (xlibs) libXaw;
@@ -273,7 +273,7 @@
 
 - 書き方
 
-    ```
+    ```nix
     pattern: body
     ```
 
@@ -281,23 +281,23 @@
 
 - 例:
 
-    ```
+    ```nix
     x: x
     ```
 
-    ```
+    ```nix
     x: y: x + y
     ```
 
 - カリー化:
 
-    ```
+    ```nix
     let add = (x: y: x + y); in add 3 4
 
     # => 7
     ```
 
-    ```
+    ```nix
     let add1 = (x: y: x + y) 1; in add1 2
 
     # => 3
@@ -308,7 +308,7 @@
 
 - 引数でセットを利用できます
 
-    ```
+    ```nix
     let add = { x, y }: x + y; in add { x = 2; y = 2; }
 
     # => 4
@@ -316,7 +316,7 @@
 
 - `?`で引数セットのデフォルト値を設定
 
-    ```
+    ```nix
     let add = { x ? 1, y }: x + y; in add { y = 2; }
 
     # => 3
@@ -325,7 +325,7 @@
 - `@`パターンでセット全体をマッチ
 
 
-    ```
+    ```nix
     let foo = args@{ x, ... }: args.a; in add { x = 2; y = 2; a = 42; }
 
     # => 42
@@ -333,7 +333,7 @@
 
 - functor (Haskellとは別物)
 
-    ```
+    ```nix
     let add = { __functor = self: x: x + self.x; };
     inc = add // { x = 1; };
     in inc 1
@@ -354,14 +354,14 @@
 
 - `with e1; e2`: `e1`セットのキーをを`e2`のスコープに入れます
 
-    ```
+    ```nix
     let as = { x = "foo"; y = "bar"; };
     in with as; x + y
     ```
 
 - コメント
 
-    ```
+    ```nix
     # シングルラインコメント
 
     /*
@@ -395,7 +395,7 @@
 - `abort s`: 評価を中止して、`s`エラーメッセージを表示
 - `builtins.all pred list`
 
-    ```
+    ```nix
     let even = (x: (x - 2 * (x / 2)) == 0); in builtins.all even [ 2 4 6 ]
 
     # => true
@@ -404,7 +404,7 @@
 - `builtins.filter pred list`
 
 
-    ```
+    ```nix
     let even = (x: (x - 2 * (x / 2)) == 0); in builtins.filter even [ 1 2 3 4 5 6 ]
 
     # => [ 2 4 6 ]
@@ -412,13 +412,13 @@
 
 - `import`: Nixファイルをインポートする
 
-    ```
+    ```nix
     import ./foo.nix
     ```
 
 - `map f list`:
 
-    ```
+    ```nix
     let square = x: x*x; in map square [1 2 3 4]
 
     # => [ 1 4 9 16 ]
@@ -426,7 +426,7 @@
 
 - `builtins.toFile name s`: Nixストアにファイルを生成します
     
-    ```
+    ```nix
     builtins.toFile "hello.txt" "hello"
 
     # => /nix/store/q790zdjk75hm2cn42nh77pqw4gbv1b88-hello.txt
