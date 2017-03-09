@@ -7,6 +7,7 @@
 
 ### 2017年
 
+- 3月（オープンソースカンファレンス）: [NixOSの基本 ― 開発と運用管理に特化したLinuxの紹介 ―](2017/03-osc/source.markdown)
 - 2月: [Managing projects with Nix](2017/02/source.markdown)
 - 1月: [Packaging](2017/01/source.markdown)
 
