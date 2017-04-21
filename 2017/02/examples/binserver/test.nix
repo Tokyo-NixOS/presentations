@@ -61,6 +61,7 @@ import <nixpkgs/nixos/tests/make-test.nix> ({ pkgs, ...} : {
   testScript = ''
     startAll;
     $server->waitForUnit("nginx");
+    $server->sleep(2);
     $server->succeed('curl -s http://127.0.0.1/3 | grep "^11$"');
   '';
 })

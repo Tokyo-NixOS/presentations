@@ -38,9 +38,6 @@ pkgs.stdenv.mkDerivation rec {
   # dependencies declaration
   buildInputs = with pkgs; [ pandoc ] ++ extraBuildInputs;
 
-  # phases of the derivation
-  phases = [ "unpackPhase" "buildPhase" "installPhase" ];
-
   # building
   buildPhase = ''
     for source in $(find . -name source\*.markdown); do
@@ -50,7 +47,8 @@ pkgs.stdenv.mkDerivation rec {
              --css https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/github.min.css \
              -V slidy-url=${commonFiles} --no-highlight \
              -A ${commonFiles}/highlight
-      echo "${pkgs.qutebrowser}/bin/qutebrowser $out/share/${name}/index$id.html --target=window &" > "meetup$id"
+      echo "#!/usr/bin/env sh" > "meetup$id"
+      echo "${pkgs.qutebrowser}/bin/qutebrowser $out/share/${name}/index$id.html --target=window &" >> "meetup$id"
     done
   '';
 
