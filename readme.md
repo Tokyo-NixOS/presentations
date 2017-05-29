@@ -7,6 +7,8 @@
 
 ### 2017年
 
+- 5月: [Nix based devops](2017/05/source.markdown)
+- 4月: [NixOS 17.03 Release Party](2017/04/source.markdown)
 - 3月: [Hydra](2017/03/source.markdown)
 - 3月（オープンソースカンファレンス）: [NixOSの基本 ― 開発と運用管理に特化したLinuxの紹介 ―](2017/03-osc/source.markdown)
 - 2月: [Managing projects with Nix](2017/02/source.markdown)

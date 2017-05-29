@@ -34,6 +34,14 @@ div.slide pre{ border-radius:3px; border:none; font-weight:normal; line-height: 
 
 code{ font-family:monospace; border-radius:.2em; padding:0.1em 0.3em; }
 
+.figure {
+  text-align: center;
+}
+
+.figure img {
+  max-width: 100%;
+}
+
 pre code{ padding:0; }
 
 blockquote{ padding:.5em 1em; border-radius:.5em; }
