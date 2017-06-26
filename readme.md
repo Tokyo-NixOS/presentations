@@ -7,6 +7,8 @@
 
 ### 2017年
 
+- 6月
+  - [Experiment: Nix and machine learning](2017/06/machine-learning/readme.md) ([日本語](2017/06/machine-learning/readme.jp.md))
 - 5月: [Nix based devops](2017/05/source.markdown)
 - 4月: [NixOS 17.03 Release Party](2017/04/source.markdown)
 - 3月: [Hydra](2017/03/source.markdown)

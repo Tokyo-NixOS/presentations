@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>CNN-mnist</title>
+
+    <link rel="stylesheet" href="{{ url_for('static',filename='style.css') }}">
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">CNN-mnist</a>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container">
+      <div class="text-center">
+        <canvas id="canvas" width="280" height="280"></canvas>
+      </div>
+      <div class="text-center buttons">
+        <button id="clear" class="btn btn-default" type="submit">Clear</button> 
+        <button id="submit" class="btn btn-primary" type="submit">Submit</button> 
+      </div>
+      <div class="panel panel-default">
+        <div class="panel-body" id="result">
+          Write a digit in the canvas and press the "Submit" button.
+        </div>
+      </div>
+    </div>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+    <script type="text/javascript">
+      $( document ).ready(function() {
+        var canvas = $('#canvas').get(0);
+        var ctx = canvas.getContext('2d');
+	      var Mouse     = { x: 0, y: 0 };
+	      var lastMouse = { x: 0, y: 0 };
+	      canvas.width  = 280;
+	      canvas.height = 280;
+
+	      ctx.fillStyle = "white";
+	      ctx.fillRect(0, 0, canvas.width, canvas.height);
+	      ctx.color = "black";
+	      ctx.lineWidth = 10;
+        ctx.lineJoin = ctx.lineCap = 'round';
+	      ctx.strokeStyle = ctx.color;
+
+	      canvas.addEventListener( "mousemove", function( e ) {
+	      	lastMouse.x = Mouse.x;
+	      	lastMouse.y = Mouse.y;
+	      	Mouse.x = e.pageX - this.offsetLeft;
+	      	Mouse.y = e.pageY - this.offsetTop;
+	      }, false );
+
+	      canvas.addEventListener( "mousedown", function( e ) {
+	      	canvas.addEventListener( "mousemove", onPaint, false );
+	      }, false );
+
+	      canvas.addEventListener( "mouseup", function() {
+	      	canvas.removeEventListener( "mousemove", onPaint, false );
+	      }, false );
+
+	      var onPaint = function() {	
+	      	ctx.beginPath();
+	      	ctx.moveTo( lastMouse.x, lastMouse.y );
+	      	ctx.lineTo( Mouse.x, Mouse.y );
+	      	ctx.closePath();
+	      	ctx.stroke();
+	      };
+
+        $( "#clear" ).click(function() {
+			  	ctx.clearRect(0, 0, 280, 280);
+          ctx.fillStyle="white";
+          ctx.fillRect(0,0,canvas.width,canvas.height);
+		    });
+  
+  		  $("#submit").click(function(){
+  		  	$.ajax({
+  		  		type: "POST",
+  		  		url:  {{ request.script_root|tojson|safe }} + "/predict/",
+  		  		data: $("#canvas").get(0).toDataURL(),
+  		  		success: function(data){
+  		  			$('#result').text('Predicted Output: ' + data.prediction);
+              /* Uncomment the following to print the model raw result
+                 in the debugging console
+              */
+              // console.log(data);
+  		  		}
+  		  	});
+  		  });
+      });
+    </script>
+  </body>
+</html>
