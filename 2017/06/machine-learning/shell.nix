@@ -4,8 +4,8 @@ stdenv.mkDerivation {
 
   name = "cnn-mnist";
   buildInputs = [
-    (python2full.buildenv.override { extralibs = with pythonpackages; [ 
-      keras
+    (python2Full.buildEnv.override { extraLibs = with pythonPackages; [ 
+      Keras
       theano
       h5py
       scipy

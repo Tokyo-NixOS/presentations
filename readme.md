@@ -7,6 +7,7 @@
 
 ### 2017年
 
+- 9月（オープンソースカンファレンス）: [Nixエコシステム ― Full Stack Deployment ―](2017/09-osc/source.markdown)
 - 6月
   - [Experiment: Nix and machine learning](2017/06/machine-learning/readme.md) ([日本語](2017/06/machine-learning/readme.jp.md))
 - 5月: [Nix based devops](2017/05/source.markdown)
